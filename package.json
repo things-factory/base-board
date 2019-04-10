@@ -1,0 +1,20 @@
+{
+  "name": "@things-factory/base-board",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "things-factory": true,
+  "license": "MIT",
+  "author": "",
+  "scripts": {
+    "build:dev": "webpack --config ./node_modules/@things-factory/shell/webpack.config.dev.js",
+    "serve:dev": "webpack-dev-server --config ./node_modules/@things-factory/shell/webpack.config.dev.js"
+  },
+  "dependencies": {
+    "@things-factory/base-menu": "*",
+    "@things-factory/shell": "*"
+  },
+  "devDependencies": {
+    "@things-factory/base-code": "*",
+    "@things-factory/resource-form": "*"
+  }
+}

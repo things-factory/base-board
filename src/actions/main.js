@@ -1,0 +1,1 @@
+export const UPDATE_BASE_BOARD = 'UPDATE_BASE_BOARD'
