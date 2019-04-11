@@ -8,7 +8,9 @@ class BoardViewer extends connect(store)(LitElement) {
     return {
       menuId: String,
       menus: Array,
-      routingTypes: Object
+      routingTypes: Object,
+      resourceId: String,
+      data: Object
     }
   }
   render() {
@@ -19,7 +21,23 @@ class BoardViewer extends connect(store)(LitElement) {
     `
   }
 
-  stateChanged(state) {}
+  stateChanged(state) {
+    if (state.app.page === 'board-viewer' && this.resourceId !== state.app.resourceId) {
+      this.resourceId = state.app.resourceId
+      this._fetchData()
+    }
+  }
+
+  async _fetchData() {
+    const res = await fetch(`http://52.231.75.202/rest/scenes/${this.resourceId}`, {
+      credentials: 'include'
+    })
+
+    if (res.ok) {
+      this.data = await res.json()
+      console.log('Board data responsed', this.data)
+    }
+  }
 }
 
 window.customElements.define('board-viewer', BoardViewer)
