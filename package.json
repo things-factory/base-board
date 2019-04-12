@@ -10,8 +10,11 @@
     "serve:dev": "webpack-dev-server --config ./node_modules/@things-factory/shell/webpack.config.dev.js"
   },
   "dependencies": {
+    "@hatiolab/things-scene": "*",
     "@things-factory/base-menu": "*",
-    "@things-factory/shell": "*"
+    "@things-factory/shell": "*",
+    "@things-shell/board-player": "*",
+    "@things-shell/board-viewer": "*"
   },
   "devDependencies": {
     "@things-factory/base-code": "*",
