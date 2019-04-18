@@ -1,12 +1,12 @@
 import { LitElement, html, css } from 'lit-element'
 
 import { connect } from 'pwa-helpers/connect-mixin.js'
-import { store } from '@things-factory/shell'
+import { store, PageView } from '@things-factory/shell'
 import { ReferenceMap, create, error } from '@hatiolab/things-scene'
 
 import '@things-shell/board-viewer'
 
-class BoardViewerPage extends connect(store)(LitElement) {
+class BoardViewerPage extends connect(store)(PageView) {
   static get properties() {
     return {
       _board: Object,
