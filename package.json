@@ -1,6 +1,6 @@
 {
   "name": "@things-factory/base-board",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "main": "src/index.js",
   "things-factory": true,
   "license": "MIT",
@@ -17,8 +17,11 @@
     "@things-shell/board-viewer": "*"
   },
   "devDependencies": {
+    "@things-factory/auth-provider-session": "*",
+    "@things-factory/auth-ui-session": "*",
     "@things-factory/base-code": "*",
     "@things-factory/resource-form": "*",
+    "@things-factory/tester": "*",
     "@things-scene/half-roundrect": "*",
     "@things-scene/wheel-sorter": "*"
   }
