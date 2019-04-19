@@ -22,14 +22,14 @@ class BoardViewerPage extends connect(store)(PageView) {
         :host {
           display: flex;
           flex-direction: column;
-          width: 100%; /* 전체화면보기를 위해서 필요함. */
+          width: 100vw; /* 전체화면보기를 위해서 필요함. */
           height: 100vh;
           overflow: hidden;
         }
 
         board-viewer {
           flex: 1;
-          width: 100%; /* 전체화면보기를 위해서 필요함. */
+          width: 100vw; /* 전체화면보기를 위해서 필요함. */
           height: 100vh;
           position: relative;
         }

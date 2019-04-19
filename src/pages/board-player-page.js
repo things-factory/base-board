@@ -22,7 +22,7 @@ class BoardPlayerPage extends connect(store)(PageView) {
         :host {
           display: flex;
           flex-direction: column;
-          width: 100%;
+          width: 100vw;
           height: 100vh;
 
           overflow: hidden;
@@ -53,6 +53,7 @@ class BoardPlayerPage extends connect(store)(PageView) {
   render() {
     return html`
       <page-toolbar></page-toolbar>
+      
       <board-player .boards=${this._boards} .provider=${this._provider}></board-player>
     `
   }
