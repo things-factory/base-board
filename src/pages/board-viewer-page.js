@@ -11,7 +11,8 @@ class BoardViewerPage extends connect(store)(PageView) {
     return {
       _board: Object,
       _provider: Object,
-      _boardId: String
+      _boardId: String,
+      _baseUrl: String
     }
   }
 
@@ -38,19 +39,19 @@ class BoardViewerPage extends connect(store)(PageView) {
 
   render() {
     return html`
+      <page-toolbar></page-toolbar>
+
       <board-viewer .board=${this._board} .provider=${this._provider}></board-viewer>
     `
   }
 
   async _fetchBoard(boardId) {
-    const res = await fetch(`http://52.231.75.202/rest/scenes/${boardId}`, {
+    const res = await fetch(`${this._baseUrl}/scenes/${boardId}`, {
       credentials: 'include'
     })
 
     if (res.ok) {
-      let data = await res.json()
-      console.log('Board data responsed', data)
-      return data
+      return await res.json()
     }
   }
 
@@ -96,9 +97,8 @@ class BoardViewerPage extends connect(store)(PageView) {
     this.dispatchEvent(new CustomEvent('change', { bubbles: true, composed: true }))
   }
 
-  async stateChanged(state) {
-    if (state.app.page === 'board-viewer' && this._boardId !== state.app.resourceId) {
-      this._boardId = state.app.resourceId
+  async updated(changed) {
+    if (changed.has('active')) {
       var board = await this._fetchBoard(this._boardId)
 
       this._board = {
@@ -106,6 +106,11 @@ class BoardViewerPage extends connect(store)(PageView) {
         model: JSON.parse(board.model)
       }
     }
+  }
+
+  stateChanged(state) {
+    this._baseUrl = state.app.baseUrl
+    this._boardId = state.app.resourceId
   }
 }
 

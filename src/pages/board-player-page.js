@@ -11,7 +11,8 @@ class BoardPlayerPage extends connect(store)(PageView) {
     return {
       _playGroupId: String,
       _boards: Array,
-      _provider: Object
+      _provider: Object,
+      _baseUrl: String
     }
   }
 
@@ -38,17 +39,20 @@ class BoardPlayerPage extends connect(store)(PageView) {
     super()
   }
 
-  async stateChanged(state) {
-    if (state.app.page === 'board-player') {
-      if (this._playGroupId !== state.app.resourceId) {
-        this._playGroupId = state.app.resourceId
-        this._boards = (await this._fetchGroup(this._playGroupId)).items
-      }
+  async updated(changed) {
+    if (changed.has('active')) {
+      this._boards = (await this._fetchGroup(this._playGroupId)).items
     }
+  }
+
+  stateChanged(state) {
+    this._baseUrl = state.app.baseUrl
+    this._playGroupId = state.app.resourceId
   }
 
   render() {
     return html`
+      <page-toolbar></page-toolbar>
       <board-player .boards=${this._boards} .provider=${this._provider}></board-player>
     `
   }
@@ -57,20 +61,17 @@ class BoardPlayerPage extends connect(store)(PageView) {
     const params = new URLSearchParams()
     params.append('sort', JSON.stringify([{ field: 'description', ascending: true }]))
 
-    const res = await fetch(`http://52.231.75.202/rest/scenes/list/${groupId}?${params}`, {
+    const res = await fetch(`${this._baseUrl}/scenes/list/${groupId}?${params}`, {
       credentials: 'include'
     })
 
     if (res.ok) {
-      let data = await res.json()
-      console.log('Player data responsed', data)
-
-      return data
+      return await res.json()
     }
   }
 
   async _fetchBoard(boardId) {
-    const res = await fetch(`http://52.231.75.202/rest/scenes/${boardId}`, {
+    const res = await fetch(`${this._baseUrl}/scenes/${boardId}`, {
       credentials: 'include'
     })
 

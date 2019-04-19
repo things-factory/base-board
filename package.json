@@ -1,6 +1,6 @@
 {
   "name": "@things-factory/base-board",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "main": "src/index.js",
   "things-factory": true,
   "license": "MIT",
@@ -20,6 +20,8 @@
     "@things-factory/auth-provider-session": "*",
     "@things-factory/auth-ui-session": "*",
     "@things-factory/base-code": "*",
+    "@things-factory/menu-provider": "*",
+    "@things-factory/menu-ui": "*",
     "@things-factory/resource-form": "*",
     "@things-factory/tester": "*",
     "@things-scene/half-roundrect": "*",
