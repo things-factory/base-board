@@ -1,6 +1,6 @@
 {
   "name": "@things-factory/base-board",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "src/index.js",
   "things-factory": true,
   "license": "MIT",
@@ -22,7 +22,7 @@
     "@things-factory/base-code": "*",
     "@things-factory/menu-provider": "*",
     "@things-factory/menu-ui": "*",
-    "@things-factory/resource-ui": "*",
+    "@things-factory/resource-ui-mobile": "*",
     "@things-factory/tester": "*",
     "@things-scene/half-roundrect": "*",
     "@things-scene/wheel-sorter": "*"
