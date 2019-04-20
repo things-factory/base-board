@@ -1,5 +1,5 @@
 {
-  "name": "@things-factory/base-board",
+  "name": "@things-factory/board-base",
   "version": "0.1.3",
   "main": "src/index.js",
   "things-factory": true,
@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@hatiolab/things-scene": "*",
-    "@things-factory/base-menu": "*",
+    "@things-factory/menu-base": "*",
     "@things-factory/shell": "*",
     "@things-shell/board-player": "*",
     "@things-shell/board-viewer": "*"
@@ -19,7 +19,7 @@
   "devDependencies": {
     "@things-factory/auth-provider-session": "*",
     "@things-factory/auth-ui-session": "*",
-    "@things-factory/base-code": "*",
+    "@things-factory/code-base": "*",
     "@things-factory/menu-provider": "*",
     "@things-factory/menu-ui": "*",
     "@things-factory/resource-ui-mobile": "*",
