@@ -1,5 +1,5 @@
 import { store } from '@things-factory/shell'
-import { addRoutingType } from '@things-factory/base-menu'
+import { addRoutingType } from '@things-factory/menu-base'
 
 import './things-scene-components.import'
 
