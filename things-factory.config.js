@@ -6,11 +6,11 @@ export default {
   routes: [
     {
       tagname: 'board-viewer-page',
-      pageName: 'board-viewer'
+      page: 'board-viewer'
     },
     {
       tagname: 'board-player-page',
-      pageName: 'board-player'
+      page: 'board-player'
     }
   ],
   bootstrap
