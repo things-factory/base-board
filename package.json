@@ -1,6 +1,6 @@
 {
   "name": "@things-factory/board-base",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "src/index.js",
   "things-factory": true,
   "license": "MIT",
@@ -11,18 +11,11 @@
   },
   "dependencies": {
     "@hatiolab/things-scene": "*",
-    "@things-factory/menu-base": "*",
-    "@things-factory/shell": "*",
-    "@things-shell/board-player": "*",
-    "@things-shell/board-viewer": "*"
+    "@things-factory/shell": "*"
   },
   "devDependencies": {
-    "@things-factory/auth-provider-session": "*",
-    "@things-factory/auth-ui-session": "*",
-    "@things-factory/code-base": "*",
     "@things-factory/menu-provider": "*",
     "@things-factory/menu-ui": "*",
-    "@things-factory/resource-ui-mobile": "*",
     "@things-factory/tester": "*",
     "@things-scene/half-roundrect": "*",
     "@things-scene/wheel-sorter": "*"
