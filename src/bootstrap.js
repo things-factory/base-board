@@ -1,5 +1,6 @@
 import { store } from '@things-factory/shell'
+import board from './reducers/board'
 
-// import './things-scene-components.import'
-
-export default function bootstrap() {}
+export default function bootstrap() {
+  store.addReducers({ board })
+}
