@@ -1,15 +1,15 @@
-import { ADD_MODELLER_CONFIG } from '../actions/board.js'
+import { ADD_BOARD_COMPONENTS } from '../actions/board.js'
 
 const INITIAL_STATE = {
-  modeller_configs: []
+  components: []
 }
 
 const board = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case ADD_MODELLER_CONFIG:
+    case ADD_BOARD_COMPONENTS:
       return {
         ...state,
-        modeller_configs: [...state.modeller_configs, action.modeller_configs]
+        components: [...state.components, ...action.components]
       }
 
     default:
