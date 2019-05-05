@@ -16,9 +16,17 @@
     "@things-factory/shell": "*"
   },
   "devDependencies": {
+    "@things-factory/auth-provider-jwt": "*",
+    "@things-factory/auth-ui-jwt": "*",
+    "@things-factory/board-provider-gql": "*",
+    "@things-factory/board-ui": "*",
+    "@things-factory/layout-ui": "*",
     "@things-factory/menu-provider": "*",
     "@things-factory/menu-ui": "*",
-    "@things-factory/tester": "*",
+    "@things-factory/more-ui": "*",
+    "@things-factory/print-ui": "*",
+    "@things-factory/resource-ui-mobile": "*",
+    "@things-factory/system-ui": "*",
     "@things-scene/half-roundrect": "*",
     "@things-scene/wheel-sorter": "*"
   }
