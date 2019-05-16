@@ -1,6 +1,6 @@
 {
   "name": "@things-factory/board-base",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "main": "dist-server/index.js",
   "browser": "client/index.js",
   "things-factory": true,
@@ -21,12 +21,14 @@
   },
   "dependencies": {
     "@hatiolab/things-scene": "*",
-    "@things-factory/shell": "*"
+    "@things-factory/provider-base-gql": "*",
+    "@things-factory/shell": "*",
+    "puppeteer": "^1.16.0",
+    "puppeteer-recorder": "^1.0.7"
   },
   "devDependencies": {
     "@things-factory/auth-provider-jwt": "*",
     "@things-factory/auth-ui-jwt": "*",
-    "@things-factory/board-provider-gql": "*",
     "@things-factory/board-ui": "*",
     "@things-factory/layout-ui": "*",
     "@things-factory/menu-provider": "*",
