@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import { client } from '@things-factory/provider-base-gql'
+import { client } from '@things-factory/shell'
 
 export async function fetchBoardList(by, id) {
   var query
