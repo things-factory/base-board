@@ -1,2 +1,2 @@
 export * from './actions/board'
-export * from './api'
+export * from './graphql'
