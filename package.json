@@ -1,6 +1,6 @@
 {
   "name": "@things-factory/board-base",
-  "version": "0.1.22",
+  "version": "0.1.23",
   "main": "dist-server/index.js",
   "browser": "client/index.js",
   "things-factory": true,
@@ -36,7 +36,7 @@
     "@things-factory/menu-ui": "*",
     "@things-factory/more-ui": "*",
     "@things-factory/print-ui": "*",
-    "@things-factory/resource-ui-mobile": "*",
+    "@things-factory/resource-ui": "*",
     "@things-factory/system-ui": "*",
     "@things-scene/half-roundrect": "*",
     "@things-scene/wheel-sorter": "*"
