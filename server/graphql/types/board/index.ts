@@ -1,6 +1,8 @@
+import { Filter, Pagination, Sorting } from '@things-factory/shell'
 import { Board } from './board'
-import { NewBoard } from './new-board'
+import { BoardList } from './board-list'
 import { BoardPatch } from './board-patch'
+import { NewBoard } from './new-board'
 
 export const Mutation = `
   createBoard (
@@ -24,8 +26,8 @@ export const Mutation = `
 `
 
 export const Query = `
-  boards: [Board]
+  boards(filters: [Filter], pagination: Pagination, sortings: [Sorting]): BoardList
   board(id: String!): Board
 `
 
-export const Types = [Board, NewBoard, BoardPatch]
+export const Types = [Filter, Pagination, Sorting, Board, NewBoard, BoardPatch, BoardList]

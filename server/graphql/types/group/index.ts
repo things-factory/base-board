@@ -1,6 +1,8 @@
+import { Filter, Pagination, Sorting } from '@things-factory/shell'
 import { Group } from './group'
-import { NewGroup } from './new-group'
+import { GroupList } from './group-list'
 import { GroupPatch } from './group-patch'
+import { NewGroup } from './new-group'
 
 export const Mutation = `
   createGroup (
@@ -23,8 +25,8 @@ export const Mutation = `
 `
 
 export const Query = `
-  groups: [Group]
+  groups(filters: [Filter], pagination: Pagination, sortings: [Sorting]): GroupList
   group(id: String!): Group
 `
 
-export const Types = [Group, NewGroup, GroupPatch]
+export const Types = [Filter, Pagination, Sorting, Group, NewGroup, GroupPatch, GroupList]

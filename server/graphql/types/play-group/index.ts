@@ -1,5 +1,7 @@
-import { PlayGroup } from './play-group'
+import { Filter, Pagination, Sorting } from '@things-factory/shell'
 import { NewPlayGroup } from './new-play-group'
+import { PlayGroup } from './play-group'
+import { PlayGroupList } from './play-group-list'
 import { PlayGroupPatch } from './play-group-patch'
 
 export const Mutation = `
@@ -28,8 +30,8 @@ export const Mutation = `
 `
 
 export const Query = `
-  playGroups: [PlayGroup]
+  playGroups(filters: [Filter], pagination: Pagination, sortings: [Sorting]): PlayGroupList
   playGroup(id: String!): PlayGroup
 `
 
-export const Types = [PlayGroup, NewPlayGroup, PlayGroupPatch]
+export const Types = [Filter, Pagination, Sorting, PlayGroup, NewPlayGroup, PlayGroupPatch, PlayGroupList]
