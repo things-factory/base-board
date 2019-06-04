@@ -8,6 +8,7 @@ import { thumbnail } from './controllers/thumbnail'
 import { headless } from './controllers/headless'
 import { screencast } from './controllers/screencast'
 import { labelcommand } from './controllers/label-command'
+import { printDirect } from './controllers/print'
 
 export const routes = new Router()
 
@@ -73,6 +74,25 @@ routes.get('/pdf/:id', async (context, next) => {
       format: 'A4'
     }
   })
+})
+
+/**
+ * ?printerId=printer_id&data=grf_string
+ */
+routes.get('/print', async (context, next) => {
+  let data = Object.keys(context.query).length ? context.query : null
+
+  context.body = await printDirect(data.printerId, data.data)
+})
+
+/**
+ * { printerId: 'printer driver ID', data: 'grf string' }
+ */
+routes.post('/print', koaBodyParser(bodyParserOption), async (context, next) => {
+  let params = context.request.body
+
+  context.type = 'text/plain'
+  context.body = await printDirect(params.printerId, params.data)
 })
 
 // for webpage scrap => zpl image print(grf format) command
