@@ -1,4 +1,3 @@
-import Router from 'koa-router'
 import koaBodyParser from 'koa-bodyparser'
 const send = require('koa-send')
 
@@ -10,101 +9,111 @@ import { screencast } from './controllers/screencast'
 import { labelcommand } from './controllers/label-command'
 import { printDirect } from './controllers/print'
 
-export const routes = new Router()
-
-const bodyParserOption = {
-  formLimit: '10mb',
-  jsonLimit: '10mb',
-  textLimit: '10mb'
-}
-
-// Send index.html when the user access the web
-const path = require('path')
-const root = path.join(__dirname, '..')
-
-// for board view only
-routes.post('/headless-board-view', koaBodyParser(bodyParserOption), async (context, next) => {
-  let model = context.request.body
-  await context.render('headless-board-view', { model })
+process.on('bootstrap-module-history-fallback' as any, (app, fallbackOption) => {
+  fallbackOption.whiteList.push('/screenshot', '/thumbnail')
 })
 
-// for board headless
-routes.get('/headless/:id', async (context, next) => {
-  let id = context.params.id
-  let model = await headless({ id })
+process.on('bootstrap-module-route' as any, (app, routes) => {
+  const bodyParserOption = {
+    formLimit: '10mb',
+    jsonLimit: '10mb',
+    textLimit: '10mb'
+  }
 
-  await context.render('headless-board-view', { model })
-})
+  // Send index.html when the user access the web
+  const path = require('path')
+  const root = path.join(__dirname, '..')
 
-// for board screencast
-routes.get('/screencast/:id', async (context, next) => {
-  let id = context.params.id
-  await screencast({ id })
-  await send(context, 'output.webm', { root })
-})
-
-// for board thumbnail
-routes.get('/thumbnail/:id', async (context, next) => {
-  let id = context.params.id
-  let data = Object.keys(context.query).length ? context.query : null
-
-  context.type = 'image/png'
-  context.body = await thumbnail({ id, data, options: { encoding: 'binary', type: 'png' } })
-})
-
-// for webpage scrap
-routes.get('/screenshot/:id', async (context, next) => {
-  let id = context.params.id
-  let data = Object.keys(context.query).length ? context.query : null
-
-  context.type = 'image/png'
-  context.body = await screenshot({ id, data, options: { encoding: 'binary', type: 'png' } })
-})
-
-// for webpage scrap
-routes.get('/pdf/:id', async (context, next) => {
-  let id = context.params.id
-  let data = Object.keys(context.query).length ? context.query : null
-
-  context.type = 'application/pdf'
-  context.body = await pdf({
-    id,
-    data,
-    options: {
-      format: 'A4'
-    }
+  // for board view only
+  routes.post('/headless-board-view', koaBodyParser(bodyParserOption), async (context, next) => {
+    let model = context.request.body
+    await context.render('headless-board-view', { model })
   })
-})
 
-/**
- * ?printerId=printer_id&data=grf_string
- */
-routes.get('/print', async (context, next) => {
-  let data = Object.keys(context.query).length ? context.query : null
+  // for board headless
+  routes.get('/headless/:id', async (context, next) => {
+    let id = context.params.id
+    let model = await headless({ id })
 
-  context.body = await printDirect(data.printerId, data.data)
-})
+    await context.render('headless-board-view', { model })
+  })
 
-/**
- * { printerId: 'printer driver ID', data: 'grf string' }
- */
-routes.post('/print', koaBodyParser(bodyParserOption), async (context, next) => {
-  let params = context.request.body
+  // for board screencast
+  routes.get('/screencast/:id', async (context, next) => {
+    let id = context.params.id
+    await screencast({ id })
+    await send(context, 'output.webm', { root })
+  })
 
-  context.type = 'text/plain'
-  context.body = await printDirect(params.printerId, params.data)
-})
+  // for board thumbnail
+  routes.get('/thumbnail/:id', async (context, next) => {
+    let id = context.params.id
+    let data = Object.keys(context.query).length ? context.query : null
 
-// for webpage scrap => zpl image print(grf format) command
-routes.get('/label-command/:id', async (context, next) => {
-  let id = context.params.id
-  let data = Object.keys(context.query).length ? context.query : null
+    context.type = 'image/png'
+    context.body = await thumbnail({ id, data, options: { encoding: 'binary', type: 'png' } })
+  })
 
-  context.type = 'text/plain'
-  context.body = await labelcommand(id, data)
-})
+  // for webpage scrap
+  routes.get('/screenshot/:id', async (context, next) => {
+    console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+    console.log('board-base routing screenshot')
+    console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
 
-routes.post('/label-command/:id', koaBodyParser(bodyParserOption), async (context, next) => {
-  let model = context.request.body
-  await context.render('label-command', { model })
+    let id = context.params.id
+    let data = Object.keys(context.query).length ? context.query : null
+
+    context.type = 'image/png'
+    context.body = await screenshot({ id, data, options: { encoding: 'binary', type: 'png' } })
+  })
+
+  // for webpage scrap
+  routes.get('/pdf/:id', async (context, next) => {
+    let id = context.params.id
+    let data = Object.keys(context.query).length ? context.query : null
+
+    context.type = 'application/pdf'
+    context.body = await pdf({
+      id,
+      data,
+      options: {
+        format: 'A4'
+      }
+    })
+  })
+
+  /**
+   * ?printerId=printer_id&data=grf_string
+   */
+  routes.get('/print', async (context, next) => {
+    let data = Object.keys(context.query).length ? context.query : null
+
+    context.body = await printDirect(data.printerId, data.data)
+  })
+
+  /**
+   * { printerId: 'printer driver ID', data: 'grf string' }
+   */
+  routes.post('/print', koaBodyParser(bodyParserOption), async (context, next) => {
+    let params = context.request.body
+
+    context.type = 'text/plain'
+    context.body = await printDirect(params.printerId, params.data)
+  })
+
+  // for webpage scrap => zpl image print(grf format) command
+  routes.get('/label-command/:id', async (context, next) => {
+    let id = context.params.id
+    let data = Object.keys(context.query).length ? context.query : null
+
+    context.type = 'text/plain'
+    context.body = await labelcommand(id, data)
+  })
+
+  routes.post('/label-command/:id', koaBodyParser(bodyParserOption), async (context, next) => {
+    let model = context.request.body
+    await context.render('label-command', { model })
+  })
+
+  console.log('board-base routing ...')
 })
