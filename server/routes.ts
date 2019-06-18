@@ -10,7 +10,15 @@ import { labelcommand } from './controllers/label-command'
 import { printDirect } from './controllers/print'
 
 process.on('bootstrap-module-history-fallback' as any, (app, fallbackOption) => {
-  fallbackOption.whiteList.push('/screenshot', '/thumbnail')
+  fallbackOption.whiteList.push(
+    '/screenshot',
+    '/thumbnail',
+    '/label-command',
+    '/print',
+    '/label-board-view',
+    '/headless',
+    '/headless-board-view'
+  )
 })
 
 process.on('bootstrap-module-route' as any, (app, routes) => {
@@ -28,6 +36,12 @@ process.on('bootstrap-module-route' as any, (app, routes) => {
   routes.post('/headless-board-view', koaBodyParser(bodyParserOption), async (context, next) => {
     let model = context.request.body
     await context.render('headless-board-view', { model })
+  })
+
+  // for label-command view only
+  routes.post('/label-board-view', koaBodyParser(bodyParserOption), async (context, next) => {
+    let model = context.request.body
+    await context.render('label-board-view', { model })
   })
 
   // for board headless
@@ -56,10 +70,6 @@ process.on('bootstrap-module-route' as any, (app, routes) => {
 
   // for webpage scrap
   routes.get('/screenshot/:id', async (context, next) => {
-    console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-    console.log('board-base routing screenshot')
-    console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-
     let id = context.params.id
     let data = Object.keys(context.query).length ? context.query : null
 
@@ -101,6 +111,16 @@ process.on('bootstrap-module-route' as any, (app, routes) => {
     context.body = await printDirect(params.printerId, params.data)
   })
 
+  routes.get('/print-label/:id', async (context, next) => {
+    let id = context.params.id
+    let data = Object.keys(context.query).length ? context.query : null
+    let grf = await labelcommand(id, data)
+
+    context.type = 'text/plain'
+    // TODO: 동기화
+    context.body = printDirect(data.printerId, grf)
+  })
+
   // for webpage scrap => zpl image print(grf format) command
   routes.get('/label-command/:id', async (context, next) => {
     let id = context.params.id
@@ -114,6 +134,4 @@ process.on('bootstrap-module-route' as any, (app, routes) => {
     let model = context.request.body
     await context.render('label-command', { model })
   })
-
-  console.log('board-base routing ...')
 })
