@@ -1,6 +1,6 @@
 {
   "name": "@things-factory/board-base",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "main": "dist-server/index.js",
   "browser": "client/index.js",
   "things-factory": true,
@@ -32,6 +32,7 @@
   "devDependencies": {
     "@things-factory/tester": "*",
     "@things-scene/half-roundrect": "*",
+    "@things-scene/label": "*",
     "@things-scene/wheel-sorter": "*"
   }
 }
