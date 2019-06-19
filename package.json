@@ -1,6 +1,6 @@
 {
   "name": "@things-factory/board-base",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "main": "dist-server/index.js",
   "browser": "client/index.js",
   "things-factory": true,
@@ -30,9 +30,6 @@
     "puppeteer-recorder": "^1.0.7"
   },
   "devDependencies": {
-    "@things-factory/tester": "*",
-    "@things-scene/half-roundrect": "*",
-    "@things-scene/label": "*",
-    "@things-scene/wheel-sorter": "*"
+    "@things-factory/board-test": "*"
   }
 }
