@@ -47,11 +47,14 @@ export async function fetchGroupList() {
     query: gql`
       {
         groups {
-          id
-          name
-          description
-          createdAt
-          updatedAt
+          items {
+            id
+            name
+            description
+            createdAt
+            updatedAt
+          }
+          total
         }
       }
     `

@@ -8,10 +8,7 @@ export async function fetchBoardList(by, id) {
       query = gql`{
           ${by}(id:"${id}") {
             boards {
-              items {
-                id name description fit width height thumbnail createdAt updatedAt
-              }
-              total
+              id name description fit width height thumbnail createdAt updatedAt
             }
           }
         }`
@@ -20,10 +17,7 @@ export async function fetchBoardList(by, id) {
       query = gql`{
           ${by}(id:"${id}") {
             boards {
-              items {
-                id name description fit width height thumbnail createdAt updatedAt
-              }
-              total
+              id name description fit width height thumbnail createdAt updatedAt
             }
           }
         }`
@@ -33,18 +27,15 @@ export async function fetchBoardList(by, id) {
       query = gql`
         {
           boards {
-            items {
-              id
-              name
-              description
-              fit
-              width
-              height
-              thumbnail
-              createdAt
-              updatedAt
-            }
-            total
+            id
+            name
+            description
+            fit
+            width
+            height
+            thumbnail
+            createdAt
+            updatedAt
           }
         }
       `
