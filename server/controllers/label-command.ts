@@ -85,32 +85,25 @@ export const labelcommand = async (id, data) => {
       browser.close()
     })
 
-  var guid = uuid()
+  // var guid = uuid()
 
   var bytesPerLine = (width + 7) >> 3
-  var grfString = `${bytesPerLine * height},${bytesPerLine},`
-
-  // 압축된 문자열 해제하는 과정
-  for (let item of grf) {
-    if (item.length > 1) {
-      var maxLength = parseInt(item.substring(1))
-      for (var i = 0; i < maxLength; i++) {
-        grfString += item[0]
-      }
-    } else {
-      grfString += item[0]
-    }
-  }
 
   return `
 ^XA
-
-~DG${guid},${grfString}
-^FO0,0
-^XGR:${guid},1,1
-^PQ1
+^GFA,${bytesPerLine * height},${bytesPerLine * height},${bytesPerLine},${grf}
 ^FS
+^XZ`
 
-^XZ
-`
+//   return `
+// ^XA
+
+// ~DG${guid},${grfString}
+// ^FO0,0
+// ^XGR:${guid},1,1
+// ^PQ1
+// ^FS
+
+// ^XZ
+// `
 }

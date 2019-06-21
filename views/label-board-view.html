@@ -27,13 +27,55 @@
     const A = 3
     const THRESHOLD = 95
 
+    const MAP_CODE = {
+      1: 'G',
+      2: 'H',
+      3: 'I',
+      4: 'J',
+      5: 'K',
+      6: 'L',
+      7: 'M',
+      8: 'N',
+      9: 'O',
+      10: 'P',
+      11: 'Q',
+      12: 'R',
+      13: 'S',
+      14: 'T',
+      15: 'U',
+      16: 'V',
+      17: 'W',
+      18: 'X',
+      19: 'Y',
+      20: 'g',
+      40: 'h',
+      60: 'i',
+      80: 'j',
+      100: 'k',
+      120: 'l',
+      140: 'm',
+      160: 'n',
+      180: 'o',
+      200: 'p',
+      220: 'q',
+      240: 'r',
+      260: 's',
+      280: 't',
+      300: 'u',
+      320: 'v',
+      340: 'w',
+      360: 'x',
+      380: 'y',
+      400: 'z'
+    }
+
     var imageData = getImageData(width, height) // 이미지 데이터
 
     // 이미지의 가로 한 줄당 바이트
     var bytesPerLine = width + 7 >> 3 // var bytesPerLine = Math.ceil(width / 8)
 
     // 바이트와 실제 너비 차이
-    var diff = (width & 7 ^ 7) + 1
+    var diff = (bytesPerLine << 3) - width
 
     // GRF 사이즈 = 가로 바이트 사이즈 * 세로
     var grfSize = bytesPerLine * height
@@ -41,10 +83,15 @@
     // GRF 사이즈 만큼의 배열 생성, GRF 문자열을 만들 때 사용, 메모리 확보
     var grfArray = new Uint8Array(grfSize)
 
-    var zippedArray = []
-    var count = 0 // 반복 문자 수
-    var sourceData = 0
-    var compareData = 0
+    var maxCharsOfLine = bytesPerLine << 1
+    var zippedGrf = ''
+    var count = 1
+    var baseNibble = null
+    var objectNibble = null
+    var baseChar = '', textLine = ''
+    var previousLine = ''
+
+    var multi20 = 0, resto20 = 0;
 
     // 도트 단위 처리를 위해 이미지 크기만큼 루프
     for (var y = 0; y < height; y++) {
@@ -63,13 +110,24 @@
 
         // 4도트마다 압축 로직 적용
         if ((x & 3) == 3) {
-          compareData = grfArray[k] & 15
-          if (sourceData === compareData) {
+          if (x == 3) {
+            baseNibble = grfArray[k] & 0b1111
+            continue
+          }
+          objectNibble = grfArray[k] & 0b1111 // 뒷 4자리
+          if (baseNibble === objectNibble) {
             count++
           } else {
-            if ( count != 0 ) zippedArray.push(sourceData.toString(16) + count)
+            baseChar = baseNibble.toString(16)
+            if (count > 20) {
+              var multi20 = Math.floor(count / 20) * 20
+              var resto20 = count % 20
+              textLine += MAP_CODE[multi20] || null
+              if (resto20) textLine += MAP_CODE[resto20] + baseChar
+              else textLine += baseChar
+            } else textLine += MAP_CODE[count] + baseChar
             count = 1
-            sourceData = compareData
+            baseNibble = objectNibble
           }
         }
       }
@@ -80,25 +138,57 @@
 
       if (diff != 0) {
         if (diff > 4) {
-          if (sourceData == (lastByteOfLine >> 4)) {
+          if (baseNibble == (lastByteOfLine >> 4)) {
             count++
           } else {
-            zippedArray.push(sourceData.toString(16) + count)
+            baseChar = baseNibble.toString(16)
+            if (count > 20) {
+              multi20 = Math.floor(count / 20) * 20
+              resto20 = count % 20
+              textLine += MAP_CODE[multi20] || null
+              if (resto20) textLine += MAP_CODE[resto20] + baseChar
+              else textLine += baseChar
+            } else textLine += MAP_CODE[count] + baseChar
             count = 1
-            sourceData = lastByteOfLine >> 4
+            baseNibble = lastByteOfLine >> 4
           }
         }
-        if (sourceData == (lastByteOfLine & 15)) {
+        if (baseNibble == (lastByteOfLine & 15)) {
           count++
         } else {
-          zippedArray.push(sourceData.toString(16) + count)
+          baseChar = baseNibble.toString(16)
+          if (count > 20) {
+            multi20 = Math.floor(count / 20) * 20
+            resto20 = count % 20
+            textLine += MAP_CODE[multi20] || null
+            if (resto20) textLine += MAP_CODE[resto20] + baseChar
+            else textLine += baseChar
+          }
+          else textLine += MAP_CODE[count] + baseChar
           count = 1
-          sourceData = lastByteOfLine & 15
+          baseNibble = lastByteOfLine & 15
         }
       }
+
+      var isOverTheLineMax = count >= maxCharsOfLine
+      baseChar = baseNibble.toString(16)
+      if (isOverTheLineMax && baseNibble == 0) textLine += ','
+      else if (isOverTheLineMax && baseNibble == 0xf) textLine += '!'
+      else if (count > 20) {
+        multi20 = Math.floor(count / 20) * 20
+        resto20 = count % 20
+        textLine += MAP_CODE[multi20] || null
+        if (resto20) textLine += MAP_CODE[resto20] + baseChar
+        else textLine += baseChar
+      }
+      else textLine += MAP_CODE[count] + baseChar
+      count = 1
+      if (textLine == previousLine) zippedGrf += ':'
+      else zippedGrf += textLine
+      previousLine = textLine
+      textLine = ''
     }
-    zippedArray.push(sourceData.toString(16) + count)
-    return zippedArray
+    return zippedGrf
   }
 
   function getImageData(width, height) {

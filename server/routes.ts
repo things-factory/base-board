@@ -52,6 +52,13 @@ process.on('bootstrap-module-route' as any, (app, routes) => {
     await context.render('headless-board-view', { model })
   })
 
+  routes.get('/label-board-view/:id', async (context, next) => {
+    let id = context.params.id
+    let model = await headless({ id })
+
+    await context.render('label-board-view', { model })
+  })
+
   // for board screencast
   routes.get('/screencast/:id', async (context, next) => {
     let id = context.params.id
