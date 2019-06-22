@@ -1,32 +1,12 @@
 import gql from 'graphql-tag'
-import { client } from '@things-factory/shell'
+import { client, gqlBuilder } from '@things-factory/shell'
 
-export async function fetchBoardList(by, id) {
-  var query
-  switch (by) {
-    case 'group':
-      query = gql`{
-          ${by}(id:"${id}") {
-            boards {
-              id name description fit width height thumbnail createdAt updatedAt
-            }
-          }
-        }`
-      break
-    case 'playGroup':
-      query = gql`{
-          ${by}(id:"${id}") {
-            boards {
-              id name description fit width height thumbnail createdAt updatedAt
-            }
-          }
-        }`
-      break
-    default:
-      // 'recent'
-      query = gql`
-        {
-          boards {
+export async function fetchBoardList(listParam = {}) {
+  const response = await client.query({
+    query: gql`
+      {
+        boards(${gqlBuilder.buildArgs(listParam)}) {
+          items {
             id
             name
             description
@@ -37,11 +17,12 @@ export async function fetchBoardList(by, id) {
             createdAt
             updatedAt
           }
+          total
         }
-      `
-  }
+      }
+    `
+  })
 
-  const response = await client.query({ query })
   return response.data
 }
 
