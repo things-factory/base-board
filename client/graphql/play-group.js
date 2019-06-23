@@ -6,12 +6,46 @@ export async function fetchPlayGroupList() {
     query: gql`
       {
         playGroups {
-          id
-          name
-          description
+          items {
+            id
+            name
+            description
+          }
+          total
         }
       }
     `
+  })
+
+  return response.data
+}
+
+export async function fetchPlayGroup(groupId) {
+  const response = await client.query({
+    query: gql`
+      query FetchPlayGroup($id: String!) {
+        playGroup(id: $id) {
+          id
+          name
+          description
+          boards {
+            id
+            name
+            description
+            model
+            thumbnail
+            fit
+            width
+            height
+            createdAt
+            updatedAt
+          }
+        }
+      }
+    `,
+    variables: {
+      id: groupId
+    }
   })
 
   return response.data
