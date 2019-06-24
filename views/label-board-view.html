@@ -193,6 +193,10 @@
       400: 'z'
     }
     var result = ''
+    while (count > 420) {
+      result += (MAP_CODE[400] + char)
+      count -= 400
+    }
     if (count > 20) {
       var multi20 = Math.floor(count / 20) * 20
       var resto20 = count % 20
