@@ -151,59 +151,22 @@
 
   // GRF 데이터를 압축
   function compressHexString(char, count) {
-    const MAP_CODE = {
-      1: 'G',
-      2: 'H',
-      3: 'I',
-      4: 'J',
-      5: 'K',
-      6: 'L',
-      7: 'M',
-      8: 'N',
-      9: 'O',
-      10: 'P',
-      11: 'Q',
-      12: 'R',
-      13: 'S',
-      14: 'T',
-      15: 'U',
-      16: 'V',
-      17: 'W',
-      18: 'X',
-      19: 'Y',
-      20: 'g',
-      40: 'h',
-      60: 'i',
-      80: 'j',
-      100: 'k',
-      120: 'l',
-      140: 'm',
-      160: 'n',
-      180: 'o',
-      200: 'p',
-      220: 'q',
-      240: 'r',
-      260: 's',
-      280: 't',
-      300: 'u',
-      320: 'v',
-      340: 'w',
-      360: 'x',
-      380: 'y',
-      400: 'z'
-    }
+    const MAP_CODE = '\0GHIJKLMNOPQRSTUVWXYg' // 1 ~ 20
+    const MAP_CODE_2 = '\0ghijklmnopqrstuvwxyz' // (1 ~ 20) * 20
     var result = ''
-    while (count > 420) {
-      result += MAP_CODE[400]
-      count -= 400
+    if (count > 1) {
+      while (count > 400) {
+        result += MAP_CODE_2[20]
+        count -= 400
+      }
+      if (count > 20) {
+        var multi20 = Math.trunc(count / 20)
+        var resto20 = count % 20
+        result += MAP_CODE_2[multi20]
+        if (resto20) result += MAP_CODE[resto20]
+      } else result += MAP_CODE[count]
     }
-    if (count > 20) {
-      var multi20 = Math.floor(count / 20) * 20
-      var resto20 = count % 20
-      result += MAP_CODE[multi20] || null
-      if (resto20) result += MAP_CODE[resto20] + char
-      else result += char
-    } else result += MAP_CODE[count] + char
+    result += char
     return result
   }
 
