@@ -19,3 +19,29 @@ export async function printDirect(printer, command) {
     }
   })
 }
+
+/**
+ * get all installed printers
+ */
+export function getPrinters() {
+  return print.getPrinters()
+}
+
+/**
+ * get specific printer by name
+ * @param printerName printer name
+ */
+export function getPrinter(printerName) {
+  return print.getPrinter(printerName)
+}
+
+/**
+ * get default printer name
+ */
+export function getDefaultPrinterName() {
+  return print.getDefaultPrinterName()
+}
+
+export function getSupportedPrintFormats() {
+  return print.getSupportedPrintFormats()
+}

@@ -44,6 +44,11 @@ process.on('bootstrap-module-route' as any, (app, routes) => {
     await context.render('label-board-view', { model })
   })
 
+  // for label-command view only
+  routes.get('/label-board-view', koaBodyParser(bodyParserOption), async (context, next) => {
+    await context.render('label-board-view', { model: {} })
+  })
+
   // for board headless
   routes.get('/headless/:id', async (context, next) => {
     let id = context.params.id

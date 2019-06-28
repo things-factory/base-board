@@ -1,33 +1,44 @@
 <style>
-  #scene {
-    width: 100%;
-    height: 100%;
+  #scene-container {
+    display: flex;
   }
 </style>
 
-<div id="scene"></div>
+<div id="scene-container"></div>
 
 <script src="/node_modules/@hatiolab/things-scene/things-scene-min.js"></script>
 <script src="/headless-scene-components.js"></script>
 <script>
-  var model = <%- JSON.stringify(model) %>;
+  // var model = <%- JSON.stringify(model) %>;
 
-  var el = document.getElementById('scene')
-  var s = scene.create({
-    model,
-    mode: 0,
-    refProvider: null //self.provider
-  })
-  s.target = el
+  const sceneContainer = document.getElementById('scene-container')
 
-  function imageDataToGrf(width, height) {
+  function createScene(id, model) {
+    var el = document.createElement('div')
+    el.setAttribute('id', id)
+    el.style.width = model.width + 'px'
+    el.style.height = model.height + 'px'
+    sceneContainer.appendChild(el)
+    var s = scene.create({
+      model,
+      mode: 0,
+      refProvider: null, //self.provider
+      target: el
+    })
+    s.fit('ratio')
+    return s
+  }
+
+  function imageDataToGrf(scene, model) {
+    const { width, height } = model
+
     const R = 0
     const G = 1
     const B = 2
     const A = 3
     const THRESHOLD = 95
 
-    const imageData = getImageData(width, height) // 이미지 데이터
+    const imageData = getImageData(scene, width, height) // 이미지 데이터
 
     // 이미지의 가로 한 줄당 바이트
     const bytesPerLine = width + 7 >> 3 // var bytesPerLine = Math.ceil(width / 8)
@@ -170,21 +181,21 @@
     return result
   }
 
-  function getImageData(width, height) {
-    return s._container.model_layer.canvas.getContext('2d').getImageData(0, 0, width, height).data
+  function getImageData(scene, width, height) {
+    return scene._container.model_layer.canvas.getContext('2d').getImageData(0, 0, width, height).data
   }
 
-  function resize() {
-    s.fit('ratio')
-  }
+  // function resize() {
+  //   s.fit('ratio')
+  // }
 
-  resize()
+  // resize()
 
-  addEventListener('resize', function () {
-    if (requestAnimationFrame) {
-      requestAnimationFrame(resize)
-    } else {
-      setTimeout(resize, 66)
-    }
-  }, false)
+  // addEventListener('resize', function () {
+  //   if (requestAnimationFrame) {
+  //     requestAnimationFrame(resize)
+  //   } else {
+  //     setTimeout(resize, 66)
+  //   }
+  // }, false)
 </script>
