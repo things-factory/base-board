@@ -1,6 +1,6 @@
 {
   "name": "@things-factory/board-base",
-  "version": "0.2.24",
+  "version": "0.2.25",
   "main": "dist-server/index.js",
   "browser": "client/index.js",
   "things-factory": true,
@@ -23,6 +23,7 @@
     "migration:revert": "node ./node_modules/typeorm/cli.js migration:revert"
   },
   "dependencies": {
+    "@things-factory/auth-base": "*",
     "@things-factory/print-base": "*",
     "@things-factory/shell": "*",
     "puppeteer": "^1.16.0",

@@ -1,10 +1,20 @@
-import { PrimaryGeneratedColumn, Column, Entity, Index, OneToMany, ManyToOne } from 'typeorm'
-import { Domain, DomainBaseEntity } from '@things-factory/shell'
+import { User } from '@things-factory/auth-base'
+import { Domain } from '@things-factory/shell'
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  Index,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from 'typeorm'
 import { Board } from './board'
 
 @Entity('groups')
 @Index('ix_group_0', (group: Group) => [group.domain, group.name], { unique: true })
-export class Group extends DomainBaseEntity {
+export class Group {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
@@ -24,4 +34,20 @@ export class Group extends DomainBaseEntity {
 
   @OneToMany(type => Board, board => board.group)
   boards: Board[]
+
+  @ManyToOne(type => User, {
+    nullable: true
+  })
+  creator: User
+
+  @ManyToOne(type => User, {
+    nullable: true
+  })
+  updater: User
+
+  @CreateDateColumn()
+  createdAt: Date
+
+  @UpdateDateColumn()
+  updatedAt: Date
 }
