@@ -13,7 +13,7 @@ import {
 } from 'typeorm'
 import { Board } from './board'
 
-@Entity('play-groups')
+@Entity()
 @Index('ix_play_group_0', (playGroup: PlayGroup) => [playGroup.domain, playGroup.name], { unique: true })
 export class PlayGroup {
   @PrimaryGeneratedColumn('uuid')
@@ -34,7 +34,7 @@ export class PlayGroup {
   description: string
 
   @ManyToMany(type => Board)
-  @JoinTable({ name: 'play-groups-boards' })
+  @JoinTable({ name: 'play_groups_boards' })
   boards: Board[]
 
   @ManyToOne(type => User, {
