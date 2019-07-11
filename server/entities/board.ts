@@ -13,22 +13,22 @@ export class Board {
   @ManyToOne(type => Domain)
   domain: Domain
 
-  @Column('text', {
+  @Column({
     unique: true
   })
   name: string
 
-  @Column('text', {
+  @Column({
     nullable: true
   })
   description: string
 
-  @Column('text', {
+  @Column({
     nullable: true
   })
   model: string
 
-  @Column('text', {
+  @Column({
     default: 'ratio',
     nullable: true
   })
@@ -40,10 +40,10 @@ export class Board {
   @Column('int')
   height: number
 
-  @Column('text')
+  @Column()
   thumbnail: string
 
-  @Column('boolean', {
+  @Column({
     default: false
   })
   published: boolean

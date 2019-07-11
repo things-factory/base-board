@@ -21,13 +21,13 @@ export class Group {
   @ManyToOne(type => Domain)
   domain: Domain
 
-  @Column('text', {
+  @Column({
     unique: true,
     nullable: false
   })
   name: string
 
-  @Column('text', {
+  @Column({
     nullable: true
   })
   description: string
