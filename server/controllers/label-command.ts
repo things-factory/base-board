@@ -5,24 +5,23 @@
 import { labelPage } from '../headless-chromium'
 import uuid from 'uuid/v4'
 
-const puppeteer = require('puppeteer')
-
 const protocol = 'http'
 const host = 'localhost'
 const path = 'label-board-view'
 
 import { headless } from './headless'
 
-export const labelcommand = async (id, data) => {
+/**
+ * 라벨 출력
+ *
+ * @param {String} id 모델 ID
+ * @param {Object} data 매핑할 데이터
+ * @param {String} orientation (시계방향) N: 0, R: 90, I: 180, B: 270
+ * @param {boolean} mirror 좌우반전
+ * @param {boolean} upsideDown 상하반전
+ */
+export const labelcommand = async (id, data, orientation = 'N', mirror = false, upsideDown = false) => {
   var model = await headless({ id })
-  let { width, height } = model
-
-  width = Number(width)
-  height = Number(height)
-
-  width = Math.floor(width)
-  height = Math.floor(height)
-
   const port = process.env.PORT
   const url = `${protocol}://${host}:${port}/${path}`
 
@@ -40,7 +39,7 @@ export const labelcommand = async (id, data) => {
   var guid = uuid()
 
   const grf = await page.evaluate(
-    async (guid, model, data) => {
+    async (guid, model, data, orientation, mirror, upsideDown) => {
       //@ts-ignore
       let s = createScene(guid, model)
       if (data) {
@@ -50,7 +49,7 @@ export const labelcommand = async (id, data) => {
         setTimeout(
           () => {
             // @ts-ignore
-            let grf = imageDataToGrf(s, model)
+            let grf = imageDataToGrf(s, model, orientation, mirror, upsideDown)
             resolve(grf)
             // @ts-ignore
             sceneContainer.removeChild(s.target)
@@ -62,14 +61,14 @@ export const labelcommand = async (id, data) => {
     },
     guid,
     model,
-    data
+    data,
+    orientation,
+    mirror,
+    upsideDown
   )
-
-  var bytesPerLine = (width + 7) >> 3
-
   return `
 ^XA
-^GFA,${bytesPerLine * height},${bytesPerLine * height},${bytesPerLine},${grf}
+^GFA,${grf}
 ^FS
 ^XZ`
 }

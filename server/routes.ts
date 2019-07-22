@@ -126,7 +126,11 @@ process.on('bootstrap-module-route' as any, (app, routes) => {
   routes.get('/print-label/:id', async (context, next) => {
     let id = context.params.id
     let data = Object.keys(context.query).length ? context.query : null
-    let grf = await labelcommand(id, data)
+    
+    let orientation = data && data.orientation
+    let mirror = data && data.mirror
+    let upsideDown = data && data.upsideDown
+    let grf = await labelcommand(id, data, orientation, mirror, upsideDown)
 
     context.type = 'text/plain'
     // TODO: 동기화
@@ -138,8 +142,12 @@ process.on('bootstrap-module-route' as any, (app, routes) => {
     let id = context.params.id
     let data = Object.keys(context.query).length ? context.query : null
 
+    let orientation = data && data.orientation
+    let mirror = data && data.mirror
+    let upsideDown = data && data.upsideDown
+
     context.type = 'text/plain'
-    context.body = await labelcommand(id, data)
+    context.body = await labelcommand(id, data, orientation, mirror, upsideDown)
   })
 
   routes.post('/label-command/:id', koaBodyParser(bodyParserOption), async (context, next) => {
