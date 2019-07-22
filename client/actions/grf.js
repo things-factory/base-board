@@ -1,15 +1,100 @@
-export function buildLabelPrintCommand(imageData, width, height) {
-  var grf = imageDataToGrf(imageData, width, height)
-  var bytesPerLine = (width + 7) >> 3
+export function buildLabelPrintCommand(imageData, width, height, orientation, mirror, upsideDown) {
+  var grf = imageDataToGrf(imageData, width, height, orientation, mirror, upsideDown)
 
   return `
 ^XA
-^GFA,${bytesPerLine * height},${bytesPerLine * height},${bytesPerLine},${grf}
+^GFA,${grf}
 ^FS
 ^XZ`
 }
 
-export function imageDataToGrf(imageData, width, height) {
+export function imageDataToGrf(imageData, width, height, orientation = 'N', mirror = false, upsideDown = false) {
+  var printWidth = width,
+    printHeight = height
+  var lay = false
+
+  var startX = 0,
+    startY = 0,
+    endX = printWidth,
+    endY = printHeight
+
+  switch (orientation) {
+    case 'R':
+    case 'r':
+    case 90:
+      printWidth = height
+      printHeight = width
+
+      if (mirror) {
+        startX = 0
+        endX = printWidth
+      } else {
+        startX = 1 - printWidth
+        endX = 1
+      }
+      if (upsideDown) {
+        startY = 1 - printHeight
+        endY = 1
+      } else {
+        startY = 0
+        endY = printHeight
+      }
+      lay = true
+      break
+    case 'I':
+    case 'i':
+    case 180:
+      if (mirror) {
+        startX = 0
+        endX = printWidth
+      } else {
+        startX = 1 - printWidth
+        endX = 1
+      }
+      if (upsideDown) {
+        startY = 0
+        endY = printHeight
+      } else {
+        startY = 1 - printHeight
+        endY = 1
+      }
+      break
+    case 'B':
+    case 'b':
+    case 270:
+      printWidth = height
+      printHeight = width
+
+      if (mirror) {
+        startX = 1 - printWidth
+        endX = 1
+      } else {
+        startX = 0
+        endX = printWidth
+      }
+      if (upsideDown) {
+        startY = 0
+        endY = printHeight
+      } else {
+        startY = 1 - printHeight
+        endY = 1
+      }
+      lay = true
+      break
+    case 'N':
+    case 'n':
+    case 0:
+    default:
+      if (mirror) {
+        startX = 1 - printWidth
+        endX = 1
+      }
+      if (upsideDown) {
+        startY = 1 - printHeight
+        endY = 1
+      }
+  }
+
   const R = 0
   const G = 1
   const B = 2
@@ -17,19 +102,19 @@ export function imageDataToGrf(imageData, width, height) {
   const THRESHOLD = 95
 
   // 이미지의 가로 한 줄당 바이트
-  const bytesPerLine = (width + 7) >> 3 // var bytesPerLine = Math.ceil(width / 8)
+  const bytesPerLine = (printWidth + 7) >> 3 // var bytesPerLine = Math.ceil(width / 8)
 
   // 이미지 너비와 grf 포맷에서 사용할 비트의 차이
-  const diff = (bytesPerLine << 3) - width
+  const diff = (bytesPerLine << 3) - printWidth
 
   // GRF 사이즈 = 가로 바이트 사이즈 * 세로
-  const grfSize = bytesPerLine * height
+  const grfSize = bytesPerLine * printHeight
 
   // 가로 한 줄당 최대 문자 수 (바이트 당 두 글자)
   const maxCharsOfLine = bytesPerLine << 1
 
-  // GRF 사이즈 만큼의 배열 생성, GRF 문자열을 만들 때 사용, 메모리 확보
-  var grfArray = new Uint8Array(grfSize)
+  // grf 압축을 위한 앞뒤 문자 비교용 그릇
+  var shortInt = new Uint8Array(1)
 
   // zpl 이미지 포맷에 맞게 압축된 문자열
   var zippedGrf = ''
@@ -50,9 +135,12 @@ export function imageDataToGrf(imageData, width, height) {
   var previousLine = ''
 
   // 도트 단위 처리를 위해 이미지 크기만큼 루프
-  for (var y = 0; y < height; y++) {
-    for (var x = 0; x < width; x++) {
-      let j = width * y + x // 현재 도트 좌표 (처리중인 도트)
+  for (var cursorY = startY; cursorY < endY; cursorY++) {
+    let y = Math.abs(cursorY)
+    for (var cursorX = startX, sequenceX = 0; cursorX < endX; cursorX++, sequenceX++) {
+      let x = Math.abs(cursorX) // 이미지 회전 시 이 값을 사용
+
+      let j = lay ? width * x + y : width * y + x // 현재 도트 좌표 (처리중인 도트)
       let i = j << 2 // 이미지 데이터의 도트 좌표 (도트 * 4)
 
       // 도트의 밝기
@@ -60,17 +148,16 @@ export function imageDataToGrf(imageData, width, height) {
       // Alpha 값이 낮을 수록 luminance가 높아지는 것으로 본다.
       luminance = luminance + ((255 - imageData[i + A]) * (255 - luminance)) / 255
 
-      let k = ((bytesPerLine << 3) * y + x) >> 3 // GRF 배열에서 사용할 요소 인덱스
-      grfArray[k] <<= 1 // 도트 좌표 이동
-      if (luminance < THRESHOLD) grfArray[k] |= 1 // THRESHOLD 값으로 칠할지 여부 판단, 어두우면 칠함
+      shortInt[0] <<= 1 // 도트 좌표 이동
+      if (luminance < THRESHOLD) shortInt[0] |= 1 // THRESHOLD 값으로 칠할지 여부 판단, 어두우면 칠함
 
       // 4도트마다 압축 로직 적용 (16진수 문자 하나마다 압축 로직 적용)
-      if ((x & 3) == 3) {
+      if ((sequenceX & 3) == 3) {
         // 현재 처리하는 바이트의 뒷 4자리(16진수 문자 하나)를 비교 대상으로 정한다.
-        objectNibble = grfArray[k] & 0b1111
+        objectNibble = shortInt[0] & 0b1111
 
         // 행의 첫 문자는 비교 기준 문자로 정하고 다음 문자로 루프 넘김
-        if (x == 3) {
+        if (sequenceX == 3) {
           baseNibble = objectNibble
           continue
         }
@@ -90,8 +177,7 @@ export function imageDataToGrf(imageData, width, height) {
     }
 
     // 끝의 8도트는 남는 도트 수만큼 왼쪽으로 밀어줌
-    var lastByteOfLine = grfArray[(y + 1) * bytesPerLine - 1]
-    lastByteOfLine <<= diff
+    shortInt[0] <<= diff
 
     // 니블을 16진수 문자화
     var baseChar = baseNibble.toString(16)
@@ -100,19 +186,19 @@ export function imageDataToGrf(imageData, width, height) {
     if (diff != 0) {
       // 차이가 4를 넘었을 때 앞 니블이 위의 루프에서 처리되지 않으므로 여기서 함
       if (diff > 4) {
-        if (baseNibble == lastByteOfLine >> 4) count++
+        if (baseNibble == shortInt[0] >> 4) count++
         else {
           currentLine += compressHexString(baseChar, count)
           count = 1
-          baseNibble = lastByteOfLine >> 4
+          baseNibble = shortInt[0] >> 4
         }
       }
       // 뒷 니블 처리
-      if (baseNibble == (lastByteOfLine & 15)) count++
+      if (baseNibble == (shortInt[0] & 15)) count++
       else {
         currentLine += compressHexString(baseChar, count)
         count = 1
-        baseNibble = lastByteOfLine & 15
+        baseNibble = shortInt[0] & 15
       }
     }
 
@@ -133,63 +219,26 @@ export function imageDataToGrf(imageData, width, height) {
     previousLine = currentLine
     currentLine = ''
   }
-  return zippedGrf
+  return `${grfSize},${grfSize},${bytesPerLine},${zippedGrf}`
 }
 
 // GRF 데이터를 압축
 function compressHexString(char, count) {
-  const MAP_CODE = {
-    1: 'G',
-    2: 'H',
-    3: 'I',
-    4: 'J',
-    5: 'K',
-    6: 'L',
-    7: 'M',
-    8: 'N',
-    9: 'O',
-    10: 'P',
-    11: 'Q',
-    12: 'R',
-    13: 'S',
-    14: 'T',
-    15: 'U',
-    16: 'V',
-    17: 'W',
-    18: 'X',
-    19: 'Y',
-    20: 'g',
-    40: 'h',
-    60: 'i',
-    80: 'j',
-    100: 'k',
-    120: 'l',
-    140: 'm',
-    160: 'n',
-    180: 'o',
-    200: 'p',
-    220: 'q',
-    240: 'r',
-    260: 's',
-    280: 't',
-    300: 'u',
-    320: 'v',
-    340: 'w',
-    360: 'x',
-    380: 'y',
-    400: 'z'
-  }
+  const MAP_CODE = '\0GHIJKLMNOPQRSTUVWXYg' // 1 ~ 20
+  const MAP_CODE_2 = '\0ghijklmnopqrstuvwxyz' // (1 ~ 20) * 20
   var result = ''
-  while (count > 420) {
-    result += MAP_CODE[400] + char
-    count -= 400
+  if (count > 1) {
+    while (count > 400) {
+      result += MAP_CODE_2[20]
+      count -= 400
+    }
+    if (count > 20) {
+      var multi20 = Math.trunc(count / 20)
+      var resto20 = count % 20
+      result += MAP_CODE_2[multi20]
+      if (resto20) result += MAP_CODE[resto20]
+    } else result += MAP_CODE[count]
   }
-  if (count > 20) {
-    var multi20 = Math.floor(count / 20) * 20
-    var resto20 = count % 20
-    result += MAP_CODE[multi20] || null
-    if (resto20) result += MAP_CODE[resto20] + char
-    else result += char
-  } else result += MAP_CODE[count] + char
+  result += char
   return result
 }
