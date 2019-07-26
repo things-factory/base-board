@@ -1,7 +1,8 @@
 export async function labelPrinterHandler(
-  { type: printerType, name: printerName },
+  { type: printerType, name: printerName, txt },
   { accept, content, name, options }
 ) {
+  var { ['service-url']: serviceUrl } = txt
   /* content should be a element */
   const board = typeof content == 'function' ? await content.call() : content
 
@@ -24,7 +25,7 @@ export async function labelPrinterHandler(
    * 서비스명 : POST /print
    * 파라미터 : printerId, data
    */
-  const response = await fetch(`/print`, {
+  const response = await fetch(`${serviceUrl ? serviceUrl : ''}/print`, {
     method: 'POST',
     credentials: 'include',
     headers: {
