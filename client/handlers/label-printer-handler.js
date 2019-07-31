@@ -1,8 +1,8 @@
 export async function labelPrinterHandler(
-  { type: printerType, name: printerName, txt },
+  { type: printerType, name: printerName, txtRecord },
   { accept, content, name, options }
 ) {
-  var { ['service-url']: serviceUrl } = txt
+  var { ['service-url']: serviceUrl } = txtRecord
   /* content should be a element */
   const board = typeof content == 'function' ? await content.call() : content
 
