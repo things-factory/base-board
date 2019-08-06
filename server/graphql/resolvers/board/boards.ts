@@ -5,7 +5,7 @@ import { ListParam, buildQuery } from '@things-factory/shell'
 export const boardsResolver = {
   async boards(_: any, params: ListParam, context: any) {
     const queryBuilder = getRepository(Board).createQueryBuilder()
-    buildQuery(queryBuilder, params)
+    buildQuery(queryBuilder, params, context)
     const [items, total] = await queryBuilder.getManyAndCount()
 
     return { items, total }
