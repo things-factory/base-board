@@ -26,7 +26,7 @@
     "@things-factory/auth-base": "*",
     "@things-factory/print-base": "*",
     "@things-factory/shell": "*",
-    "puppeteer": "^1.16.0",
+    "puppeteer": "^1.19.0",
     "puppeteer-recorder": "^1.0.7"
   },
   "devDependencies": {
