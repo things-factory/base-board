@@ -10,9 +10,6 @@ export async function fetchBoardList(listParam = {}) {
             id
             name
             description
-            fit
-            width
-            height
             thumbnail
             createdAt
             updatedAt
@@ -40,9 +37,6 @@ export async function fetchBoard(id) {
           }
           thumbnail
           model
-          fit
-          width
-          height
           createdAt
           creator {
             id
@@ -68,13 +62,10 @@ export async function createBoard(board) {
       name        : String!
       description : String
       model       : String!
-      width       : Int
-      height      : Int
-      published   : Boolean
     }
     */
 
-  var { name, description, model, fit, width, height, published, group } = board
+  var { name, description, model, groupId } = board
   model = JSON.stringify(model)
 
   const response = await client.mutate({
@@ -85,16 +76,13 @@ export async function createBoard(board) {
           name
           description
           model
-          fit
-          width
-          height
           createdAt
           updatedAt
         }
       }
     `,
     variables: {
-      board: { name, description, model, fit, width, height, published },
+      board: { name, description, model, groupId },
       group
     }
   })
@@ -108,12 +96,9 @@ export async function updateBoard(board) {
       name        : String
       description : String
       model       : String
-      width       : Int
-      height      : Int
-      published   : Boolean
     }
     */
-  var { id, name, description, model, fit, width, height, published } = board
+  var { id, name, description, model, groupId } = board
   model = JSON.stringify(model)
 
   const response = await client.mutate({
@@ -124,9 +109,10 @@ export async function updateBoard(board) {
           name
           description
           model
-          fit
-          width
-          height
+          group {
+            id
+            name
+          }
           createdAt
           updatedAt
         }
@@ -134,7 +120,7 @@ export async function updateBoard(board) {
     `,
     variables: {
       id,
-      patch: { name, description, model, fit, width, height, published }
+      patch: { name, description, model, groupId }
     }
   })
 

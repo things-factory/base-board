@@ -6,11 +6,7 @@ export const Board = gql`
     name: String
     description: String
     model: String
-    fit: String
-    width: Int
-    height: Int
     thumbnail: String
-    published: Boolean
     group: Group
     createdAt: String
     creator: User

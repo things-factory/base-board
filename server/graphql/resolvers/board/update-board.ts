@@ -14,16 +14,20 @@ export const updateBoard = {
     )
 
     if (patch.model) {
-      const { width, height } = JSON.parse(patch.model)
-
       const base64 = await thumbnail({
         model: patch.model
       })
 
       patch.thumbnail = 'data:image/png;base64,' + base64.toString('base64')
+    }
 
-      patch.width = width
-      patch.height = height
+    if (patch.groupId) {
+      const groupRepository = getRepository(Group)
+      board.group = await groupRepository.findOne({
+        id: patch.groupId
+      })
+
+      delete patch.groupId
     }
 
     return await repository.save({

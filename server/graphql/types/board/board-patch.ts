@@ -5,9 +5,6 @@ export const BoardPatch = gql`
     name: String
     description: String
     model: String
-    fit: String
-    width: Int
-    height: Int
-    published: Boolean
+    groupId: String
   }
 `
