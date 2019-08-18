@@ -7,9 +7,9 @@ export const groupsResolver = {
     const queryBuilder = getRepository(Group).createQueryBuilder()
     buildQuery(queryBuilder, params, context)
     const [items, total] = await queryBuilder
-      .leftJoinAndSelect('Inventory.domain', 'Domain')
-      .leftJoinAndSelect('Inventory.creator', 'Creator')
-      .leftJoinAndSelect('Inventory.updater', 'Updater')
+      .leftJoinAndSelect('Group.domain', 'Domain')
+      .leftJoinAndSelect('Group.creator', 'Creator')
+      .leftJoinAndSelect('Group.updater', 'Updater')
       .getManyAndCount()
 
     return { items, total }

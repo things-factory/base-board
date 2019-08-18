@@ -7,9 +7,9 @@ export const boardsResolver = {
     const queryBuilder = getRepository(Board).createQueryBuilder()
     buildQuery(queryBuilder, params, context)
     const [items, total] = await queryBuilder
-      .leftJoinAndSelect('Inventory.domain', 'Domain')
-      .leftJoinAndSelect('Inventory.creator', 'Creator')
-      .leftJoinAndSelect('Inventory.updater', 'Updater')
+      .leftJoinAndSelect('Board.domain', 'Domain')
+      .leftJoinAndSelect('Board.creator', 'Creator')
+      .leftJoinAndSelect('Board.updater', 'Updater')
       .getManyAndCount()
 
     return { items, total }

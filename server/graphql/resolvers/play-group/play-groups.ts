@@ -7,9 +7,9 @@ export const playGroupsResolver = {
     const queryBuilder = getRepository(PlayGroup).createQueryBuilder()
     buildQuery(queryBuilder, params, context)
     const [items, total] = await queryBuilder
-      .leftJoinAndSelect('Inventory.domain', 'Domain')
-      .leftJoinAndSelect('Inventory.creator', 'Creator')
-      .leftJoinAndSelect('Inventory.updater', 'Updater')
+      .leftJoinAndSelect('PlayGroup.domain', 'Domain')
+      .leftJoinAndSelect('PlayGroup.creator', 'Creator')
+      .leftJoinAndSelect('PlayGroup.updater', 'Updater')
       .getManyAndCount()
 
     return { items, total }
