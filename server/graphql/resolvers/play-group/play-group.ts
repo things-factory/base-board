@@ -3,13 +3,9 @@ import { PlayGroup } from '../../../entities'
 
 export const playGroupResolver = {
   async playGroup(_, { id }, context, info) {
-    const repository = getRepository(PlayGroup)
-
-    return await repository.findOne(
-      { id },
-      {
-        relations: ['boards']
-      }
-    )
+    return await getRepository(PlayGroup).findOne({
+      where: { domain: context.domain, id },
+      relations: ['domain', 'group', 'creator', 'updater']
+    })
   }
 }

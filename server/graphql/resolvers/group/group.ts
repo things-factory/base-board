@@ -3,13 +3,9 @@ import { Group } from '../../../entities'
 
 export const groupResolver = {
   async group(_, { id }, context, info) {
-    const repository = getRepository(Group)
-
-    return await repository.findOne(
-      { id },
-      {
-        relations: ['boards']
-      }
-    )
+    return await getRepository(Group).findOne({
+      where: { domain: context.domain, id },
+      relations: ['domain', 'group', 'creator', 'updater']
+    })
   }
 }
