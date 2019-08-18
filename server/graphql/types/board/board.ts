@@ -13,6 +13,8 @@ export const Board = gql`
     published: Boolean
     group: Group
     createdAt: String
+    creator: User
     updatedAt: String
+    updater: User
   }
 `
