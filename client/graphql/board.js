@@ -34,6 +34,11 @@ export async function fetchBoard(id) {
           id
           name
           description
+          group {
+            id
+            name
+          }
+          thumbnail
           model
           fit
           width
