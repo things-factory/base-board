@@ -44,7 +44,15 @@ export async function fetchBoard(id) {
           width
           height
           createdAt
+          creator {
+            id
+            name
+          }
           updatedAt
+          updater {
+            id
+            name
+          }
         }
       }
     `,
