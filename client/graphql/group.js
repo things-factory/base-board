@@ -1,6 +1,33 @@
 import gql from 'graphql-tag'
 import { client } from '@things-factory/shell'
 
+export async function fetchGroup(id) {
+  const response = await client.query({
+    query: gql`
+      query FetchGroupById($id: String!) {
+        group(id: $id) {
+          id
+          name
+          description
+          createdAt
+          creator {
+            id
+            name
+          }
+          updatedAt
+          updater {
+            id
+            name
+          }
+        }
+      }
+    `,
+    variables: { id }
+  })
+
+  return response.data
+}
+
 export async function updateGroup(group) {
   var { id, name, description } = group
 

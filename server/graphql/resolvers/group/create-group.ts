@@ -1,17 +1,13 @@
-import uuid from 'uuid/v4'
-
 import { getRepository } from 'typeorm'
 import { Group } from '../../../entities'
 
 export const createGroup = {
-  async createGroup(_, { group: attrs }) {
-    const repository = getRepository(Group)
-
-    const group = {
-      id: uuid(),
-      ...attrs
-    }
-
-    return await repository.save(group)
+  async createGroup(_, { group }, context) {
+    return await getRepository(Group).save({
+      domain: context.domain,
+      ...group,
+      creatorId: context.state.user.id,
+      updaterId: context.state.user.id
+    })
   }
 }

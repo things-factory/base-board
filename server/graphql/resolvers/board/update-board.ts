@@ -3,15 +3,10 @@ import { Board, Group } from '../../../entities'
 import { thumbnail } from '../../../controllers/thumbnail'
 
 export const updateBoard = {
-  async updateBoard(_, { id, patch }) {
+  async updateBoard(_, { id, patch }, context) {
     const repository = getRepository(Board)
 
-    const board = await repository.findOne(
-      { id },
-      {
-        relations: ['group']
-      }
-    )
+    const board = await repository.findOne({ id })
 
     if (patch.model) {
       const base64 = await thumbnail({
@@ -32,7 +27,8 @@ export const updateBoard = {
 
     return await repository.save({
       ...board,
-      ...patch
+      ...patch,
+      updaterId: context.state.user.id
     })
   }
 }

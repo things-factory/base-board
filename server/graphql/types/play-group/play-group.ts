@@ -7,6 +7,8 @@ export const PlayGroup = gql`
     description: String
     boards: [Board]
     createdAt: String
+    creator: User
     updatedAt: String
+    updater: User
   }
 `
