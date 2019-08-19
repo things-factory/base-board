@@ -5,7 +5,7 @@ export const groupResolver = {
   async group(_, { id }, context, info) {
     return await getRepository(Group).findOne({
       where: { domain: context.domain, id },
-      relations: ['domain', 'group', 'creator', 'updater']
+      relations: ['domain', 'creator', 'updater']
     })
   }
 }
