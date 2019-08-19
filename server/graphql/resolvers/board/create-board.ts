@@ -1,19 +1,19 @@
 import { getRepository } from 'typeorm'
-import { Group, Board } from '../../../entities'
+import { Board, Group } from '../../../entities'
 
 import { thumbnail } from '../../../controllers/thumbnail'
 
 export const createBoard = {
-  async createBoard(_, { board, groupId }, context) {
+  async createBoard(_, { board }, context) {
     const repository = getRepository(Board)
-    const newBoard = {
-      ...board
-    }
-
     const groupRepository = getRepository(Group)
-    newBoard.group = await groupRepository.findOne({
-      id: groupId
-    })
+
+    const newBoard = {
+      ...board,
+      group: await groupRepository.findOne({
+        id: board.groupId
+      })
+    }
 
     const base64 = await thumbnail({
       model: board.model
@@ -22,9 +22,10 @@ export const createBoard = {
     newBoard.thumbnail = 'data:image/png;base64,' + base64.toString('base64')
 
     return await repository.save({
+      domain: context.domain,
       ...newBoard,
-      creatorId: context.state.user.id,
-      updaterId: context.state.user.id
+      creator: context.state.user,
+      updater: context.state.user
     })
   }
 }

@@ -65,13 +65,12 @@ export async function createBoard(board) {
     }
     */
 
-  var { name, description, model, groupId } = board
-  model = JSON.stringify(model)
+  board.model = JSON.stringify(board.model)
 
   const response = await client.mutate({
     mutation: gql`
-      mutation CreateBoard($board: NewBoard!, $group: String!) {
-        createBoard(board: $board, groupId: $group) {
+      mutation CreateBoard($board: NewBoard!) {
+        createBoard(board: $board) {
           id
           name
           description
@@ -82,8 +81,7 @@ export async function createBoard(board) {
       }
     `,
     variables: {
-      board: { name, description, model, groupId },
-      group
+      board
     }
   })
 

@@ -1,11 +1,7 @@
 {
   "field.model": "모델",
-  "field.fit": "fit",
-  "field.width": "넓이",
-  "field.height": "높이",
   "field.thumbnail": "미리보기",
   "field.default": "기본",
-  "field.published": "배포",
   "field.group": "그룹",
   "field.boards": "boards"
 }

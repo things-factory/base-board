@@ -28,25 +28,8 @@ export class Board {
   })
   model: string
 
-  @Column({
-    default: 'ratio',
-    nullable: true
-  })
-  fit: string
-
-  @Column('int')
-  width: number
-
-  @Column('int')
-  height: number
-
   @Column()
   thumbnail: string
-
-  @Column({
-    default: false
-  })
-  published: boolean
 
   @ManyToOne(type => Group, group => group.boards)
   group: Group

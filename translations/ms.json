@@ -1,11 +1,7 @@
 {
   "field.model": "model",
-  "field.fit": "sesuai",
-  "field.width": "lebar",
-  "field.height": "tinggi",
   "field.thumbnail": "lakaran",
   "field.default": "asalan",
-  "field.published": "diterbitkan",
   "field.group": "kumpulan",
   "field.boards": "papan-papan"
 }

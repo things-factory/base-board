@@ -7,7 +7,6 @@ import { NewBoard } from './new-board'
 export const Mutation = `
   createBoard (
     board: NewBoard!
-    groupId: String!
   ): Board
 
   updateBoard (
@@ -17,11 +16,6 @@ export const Mutation = `
 
   deleteBoard (
     id: String!
-  ): Board
-
-  publishBoard (
-    id: String!
-    published: Boolean
   ): Board
 `
 

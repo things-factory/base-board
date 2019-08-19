@@ -5,6 +5,6 @@ export const NewBoard = gql`
     name: String!
     description: String
     model: String!
-    published: Boolean
+    groupId: String!
   }
 `

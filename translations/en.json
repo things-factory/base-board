@@ -1,11 +1,7 @@
 {
   "field.model": "model",
-  "field.fit": "fit",
-  "field.width": "width",
-  "field.height": "height",
   "field.thumbnail": "thumbnail",
   "field.default": "default",
-  "field.published": "published",
   "field.group": "group",
   "field.boards": "boards"
 }
