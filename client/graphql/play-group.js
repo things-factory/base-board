@@ -35,7 +35,25 @@ export async function fetchPlayGroup(groupId) {
             model
             thumbnail
             createdAt
+            creator {
+              id
+              name
+            }
             updatedAt
+            updater {
+              id
+              name
+            }
+          }
+          createdAt
+          creator {
+            id
+            name
+          }
+          updatedAt
+          updater {
+            id
+            name
           }
         }
       }
