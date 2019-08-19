@@ -34,9 +34,6 @@ export async function fetchPlayGroup(groupId) {
             description
             model
             thumbnail
-            fit
-            width
-            height
             createdAt
             updatedAt
           }
