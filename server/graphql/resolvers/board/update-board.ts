@@ -28,7 +28,7 @@ export const updateBoard = {
     return await repository.save({
       ...board,
       ...patch,
-      updaterId: context.state.user.id
+      updater: context.state.user
     })
   }
 }
