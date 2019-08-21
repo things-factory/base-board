@@ -6,8 +6,8 @@ export const createPlayGroup = {
     return await getRepository(PlayGroup).save({
       domain: context.domain,
       ...playGroup,
-      creatorId: context.state.user.id,
-      updaterId: context.state.user.id
+      creator: context.state.user,
+      updater: context.state.user
     })
   }
 }

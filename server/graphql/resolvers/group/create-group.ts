@@ -6,8 +6,8 @@ export const createGroup = {
     return await getRepository(Group).save({
       domain: context.domain,
       ...group,
-      creatorId: context.state.user.id,
-      updaterId: context.state.user.id
+      creator: context.state.user,
+      updater: context.state.user
     })
   }
 }

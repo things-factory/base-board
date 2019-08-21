@@ -10,7 +10,7 @@ export const updatePlayGroup = {
     return await repository.save({
       ...playGroup,
       ...patch,
-      updaterId: context.state.user.id
+      updater: context.state.user
     })
   }
 }
