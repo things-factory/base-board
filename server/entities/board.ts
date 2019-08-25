@@ -46,7 +46,6 @@ export class Board {
   group: Group
 
   @ManyToMany(type => PlayGroup, playGroup => playGroup.boards)
-  @JoinTable({ name: 'play_groups_boards' })
   playGroups: PlayGroup[]
 
   @ManyToOne(type => User, {
