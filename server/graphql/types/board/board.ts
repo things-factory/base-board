@@ -8,6 +8,7 @@ export const Board = gql`
     model: String
     thumbnail: String
     group: Group
+    playGroups: [PlayGroup]
     createdAt: String
     creator: User
     updatedAt: String

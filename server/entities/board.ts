@@ -1,7 +1,18 @@
 import { User } from '@things-factory/auth-base'
 import { Domain } from '@things-factory/shell'
-import { Column, CreateDateColumn, Entity, Index, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  Index,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from 'typeorm'
 import { Group } from './group'
+import { PlayGroup } from './play-group'
 
 @Entity('boards')
 @Index('ix_board_0', (board: Board) => [board.domain, board.name], { unique: true })
@@ -33,6 +44,10 @@ export class Board {
 
   @ManyToOne(type => Group, group => group.boards)
   group: Group
+
+  @ManyToMany(type => PlayGroup, playGroup => playGroup.boards)
+  @JoinTable({ name: 'play_groups_boards' })
+  playGroups: PlayGroup[]
 
   @ManyToOne(type => User, {
     nullable: true

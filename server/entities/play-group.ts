@@ -33,7 +33,7 @@ export class PlayGroup {
   })
   description: string
 
-  @ManyToMany(type => Board)
+  @ManyToMany(type => Board, board => board.playGroups)
   @JoinTable({ name: 'play_groups_boards' })
   boards: Board[]
 
