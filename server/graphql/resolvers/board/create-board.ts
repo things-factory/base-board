@@ -22,7 +22,7 @@ export const createBoard = {
     newBoard.thumbnail = 'data:image/png;base64,' + base64.toString('base64')
 
     return await repository.save({
-      domain: context.domain,
+      domain: context.state.domain,
       ...newBoard,
       creator: context.state.user,
       updater: context.state.user
