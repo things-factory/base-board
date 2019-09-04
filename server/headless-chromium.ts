@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer')
 function initializeChromium() {
   return puppeteer.launch({
     // devtools: true,
-    args: ['--hide-scrollbars', '--mute-audio', '--no-sandbox'],
+    args: ['--hide-scrollbars', '--mute-audio', '--no-sandbox']
   })
 }
 

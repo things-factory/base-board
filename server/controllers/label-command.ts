@@ -46,17 +46,14 @@ export const labelcommand = async (id, data, orientation = 'N', mirror = false, 
         s.data = data
       }
       return new Promise(resolve => {
-        setTimeout(
-          () => {
-            // @ts-ignore
-            let grf = imageDataToGrf(s, model, orientation, mirror, upsideDown)
-            resolve(grf)
-            // @ts-ignore
-            sceneContainer.removeChild(s.target)
-            s.dispose()
-          },
-          data ? 500 : 10
-        )
+        setTimeout(() => {
+          // @ts-ignore
+          let grf = imageDataToGrf(s, model, orientation, mirror, upsideDown)
+          resolve(grf)
+          // @ts-ignore
+          sceneContainer.removeChild(s.target)
+          s.dispose()
+        }, 10)
       })
     },
     guid,
