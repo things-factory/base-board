@@ -1,4 +1,4 @@
-<style>
+<style type="text/css">
   #scene-container {
     display: flex;
   }
@@ -15,7 +15,7 @@
 
   function createScene(id, model) {
     var el = document.createElement('div')
-    el.setAttribute('id', id)
+    el.setAttribute('id', 'scene-' + id)
     el.style.width = model.width + 'px'
     el.style.height = model.height + 'px'
     sceneContainer.appendChild(el)

@@ -79,7 +79,8 @@ export const pdf = async ({
 
     // data 주입 후 강제 지연시킴.
     return new Promise(resolve => {
-      setTimeout(
+      // @ts-ignore
+      requestAnimationFrame(
         () => {
           // @ts-ignore
           resolve()

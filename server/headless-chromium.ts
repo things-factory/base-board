@@ -8,8 +8,9 @@ function initializeChromium() {
 }
 
 export const browser = initializeChromium()
-export const labelPage = browser.then(async browser => {
-  return await browser.newPage()
+export const page = browser.then(async browser => {
+  var pages = await browser.pages()
+  return pages[0]
 })
 module.exports.browser = browser
-module.exports.labelPage = labelPage
+module.exports.page = page

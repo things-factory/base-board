@@ -2,7 +2,7 @@
  * Copyright © HatioLab Inc. All rights reserved.
  */
 
-import { labelPage } from '../headless-chromium'
+import { page as labelPage } from '../headless-chromium'
 import uuid from 'uuid/v4'
 
 const protocol = 'http'
@@ -46,14 +46,16 @@ export const labelcommand = async (id, data, orientation = 'N', mirror = false, 
         s.data = data
       }
       return new Promise(resolve => {
-        setTimeout(() => {
+        // @ts-ignore
+        requestAnimationFrame(() => {
           // @ts-ignore
           let grf = imageDataToGrf(s, model, orientation, mirror, upsideDown)
           resolve(grf)
+          console.log({grf})
           // @ts-ignore
           sceneContainer.removeChild(s.target)
           s.dispose()
-        }, 10)
+        })
       })
     },
     guid,
