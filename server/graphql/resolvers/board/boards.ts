@@ -10,6 +10,7 @@ export const boardsResolver = {
       .leftJoinAndSelect('Board.domain', 'Domain')
       .leftJoinAndSelect('Board.creator', 'Creator')
       .leftJoinAndSelect('Board.updater', 'Updater')
+      .leftJoinAndSelect('Board.group', 'Group')
       .getManyAndCount()
 
     return { items, total }
