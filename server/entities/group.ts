@@ -22,7 +22,6 @@ export class Group {
   domain: Domain
 
   @Column({
-    unique: true,
     nullable: false
   })
   name: string

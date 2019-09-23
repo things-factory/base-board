@@ -25,7 +25,7 @@ export class Board {
   domain: Domain
 
   @Column({
-    unique: true
+    nullable: false
   })
   name: string
 

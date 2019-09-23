@@ -23,7 +23,6 @@ export class PlayGroup {
   domain: Domain
 
   @Column({
-    unique: true,
     nullable: false
   })
   name: string
