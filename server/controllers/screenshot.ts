@@ -56,10 +56,7 @@ export const screenshot = async ({
       // data 주입 후 강제 지연시킴.
       return new Promise(resolve => {
         // @ts-ignore
-        requestAnimationFrame(() => {
-          // @ts-ignore
-          resolve()
-        })
+        requestAnimationFrame(() => resolve())
       })
     }, data)
 
