@@ -2,6 +2,8 @@ import { boardResolver } from './board'
 import { boardsResolver } from './boards'
 
 import { updateBoard } from './update-board'
+import { updateMultipleBoard } from './update-multiple-board'
+
 import { createBoard } from './create-board'
 import { deleteBoard } from './delete-board'
 
@@ -13,5 +15,6 @@ export const Query = {
 export const Mutation = {
   ...updateBoard,
   ...createBoard,
-  ...deleteBoard
+  ...deleteBoard,
+  ...updateMultipleBoard
 }

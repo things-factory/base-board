@@ -17,6 +17,10 @@ export const Mutation = `
   deleteBoard (
     id: String!
   ): Board
+
+  updateMultipleBoard (
+    patches: [BoardPatch]!
+  ): [Board] 
 `
 
 export const Query = `

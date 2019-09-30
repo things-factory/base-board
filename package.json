@@ -25,6 +25,7 @@
   "dependencies": {
     "@things-factory/auth-base": "*",
     "@things-factory/shell": "*",
+    "@things-scene/grist": "^0.1.12",
     "printer": "^0.2.2",
     "puppeteer": "^1.19.0",
     "puppeteer-recorder": "^1.0.7"
