@@ -20,7 +20,7 @@ import { headless } from './headless'
  * @param {boolean} mirror 좌우반전
  * @param {boolean} upsideDown 상하반전
  */
-export const labelcommand = async (id, data, orientation = 'N', mirror = false, upsideDown = false) => {
+export const labelcommand = async (id, data, orientation, mirror = false, upsideDown = false) => {
   var model = await headless({ id })
   const port = process.env.PORT
   const url = `${protocol}://${host}:${port}/${path}`
