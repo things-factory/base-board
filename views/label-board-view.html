@@ -34,6 +34,8 @@
   // N: 0, R: 90, I: 180, B: 270
   function imageDataToGrf(scene, model, orientation, mirror = false, upsideDown = false) {
     const { width, height } = model
+    width = Math.round(width)
+    height = Math.round(height)
     orientation = orientation || model.labelRotation || 'N'
     var printWidth = width,
       printHeight = height
@@ -136,7 +138,7 @@
     const diff = (bytesPerLine << 3) - printWidth
 
     // GRF 사이즈 = 가로 바이트 사이즈 * 세로
-    const grfSize = bytesPerLine * printHeight
+    const grfSize = Math.round(bytesPerLine * printHeight)
 
     // 가로 한 줄당 최대 문자 수 (바이트 당 두 글자)
     const maxCharsOfLine = bytesPerLine << 1
