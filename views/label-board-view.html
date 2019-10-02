@@ -33,7 +33,7 @@
 
   // N: 0, R: 90, I: 180, B: 270
   function imageDataToGrf(scene, model, orientation, mirror = false, upsideDown = false) {
-    const { width, height } = model
+    var { width, height } = model
     width = Math.round(width)
     height = Math.round(height)
     orientation = orientation || model.labelRotation || 'N'
