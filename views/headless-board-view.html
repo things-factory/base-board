@@ -9,9 +9,10 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
 <script>
+  var model = <%- JSON.stringify(model) %>;
   WebFont.load({
     google: {
-      families: ['Roboto', 'Pangolin', 'Railway', 'Slabo', 'Skranji']
+      families: model.fonts
     }
   })
 </script>
@@ -20,8 +21,6 @@
 <script src="/headless-scene-components.js"></script>
 <script src="/licenses/things-lic.js"></script>
 <script>
-  var model = <%- JSON.stringify(model) %>;
-
   var el = document.getElementById('scene');
   scene.license(window.ThingsLicense);
   var s = scene.create({

@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer')
 import { headless } from './headless'
+import { fonts } from './fonts'
 import { browser } from '../headless-chromium'
 
 const protocol = 'http'
@@ -15,6 +16,7 @@ export const screenshot = async ({
   options = { encoding: 'base64' } as any
 } = {}) => {
   model = await headless({ id, model })
+  model.fonts = (await fonts()).map((font: { name }) => font.name)
 
   var { width, height } = model
 
