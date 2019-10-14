@@ -3,6 +3,7 @@
  */
 
 import { page as labelPage } from '../headless-chromium'
+import { fonts } from './fonts'
 import uuid from 'uuid/v4'
 
 const protocol = 'http'
@@ -22,16 +23,31 @@ import { headless } from './headless'
  */
 export const labelcommand = async (id, data, orientation, mirror = false, upsideDown = false) => {
   var model = await headless({ id })
+  var fontList = (await fonts()).map((font: { name }) => font.name)
   const port = process.env.PORT
   const url = `${protocol}://${host}:${port}/${path}`
 
   const page = await labelPage.then(async page => {
     if (page.url() != url) {
-      await page.goto(url)
+      await page.setRequestInterception(true)
       page.on('console', msg => {
         console.log(`[browser ${msg._type}] ${msg._text}`)
         for (let i = 0; i < msg.args().length; ++i) console.log(`${i}: ${msg.args()[i]}`)
       })
+      page.on('request', request => {
+        if (request.url() === url) {
+          request.continue({
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            postData: JSON.stringify(fontList)
+          })
+        } else {
+          request.continue()
+        }
+      })
+      await page.goto(url)
     }
     return page
   })
@@ -51,7 +67,6 @@ export const labelcommand = async (id, data, orientation, mirror = false, upside
           // @ts-ignore
           let grf = imageDataToGrf(s, model, orientation, mirror, upsideDown)
           resolve(grf)
-          console.log({grf})
           // @ts-ignore
           sceneContainer.removeChild(s.target)
           s.dispose()

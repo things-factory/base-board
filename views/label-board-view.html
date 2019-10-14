@@ -8,9 +8,10 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
 <script>
+  var fonts = <%- JSON.stringify(model) %>;
   WebFont.load({
     google: {
-      families: ['Roboto', 'Pangolin', 'Railway', 'Slabo', 'Skranji']
+      families: fonts
     }
   })
 </script>
