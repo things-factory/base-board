@@ -45,7 +45,7 @@ process.on('bootstrap-module-route' as any, (app, routes) => {
   })
 
   // for label-command view only
-  routes.get('/label-board-view', koaBodyParser(bodyParserOption), async (context, next) => {
+  routes.get('/label-board-view', async (context, next) => {
     await context.render('label-board-view', { model: {} })
   })
 

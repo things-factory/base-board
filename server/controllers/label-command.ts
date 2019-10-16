@@ -2,14 +2,47 @@
  * Copyright © HatioLab Inc. All rights reserved.
  */
 
-import { labelPage } from '../headless-chromium'
+import { browser } from '../headless-chromium'
+import { fonts } from './fonts'
 import uuid from 'uuid/v4'
 
-const protocol = 'http'
-const host = 'localhost'
-const path = 'label-board-view'
-
 import { headless } from './headless'
+
+var fontsInUse = [],
+  fontsToUse = []
+
+const labelPage = browser.then(async b => {
+  const protocol = 'http'
+  const host = 'localhost'
+  const path = 'label-board-view'
+
+  const port = process.env.PORT
+  const url = `${protocol}://${host}:${port}/${path}`
+
+  const page = await b.newPage()
+  fontsToUse = (await fonts()).map((f: { name: string }) => f.name)
+
+  await page.setRequestInterception(true)
+  page.on('console', msg => {
+    console.log(`[browser ${msg._type}] ${msg._text}`)
+    for (let i = 0; i < msg.args().length; ++i) console.log(`${i}: ${msg.args()[i]}`)
+  })
+  page.on('request', request => {
+    if (request.url() === url) {
+      request.continue({
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        postData: JSON.stringify(fontsToUse)
+      })
+    } else {
+      request.continue()
+    }
+  })
+  await page.goto(url, { timeout: 0 })
+  return page
+})
 
 /**
  * 라벨 출력
@@ -22,10 +55,22 @@ import { headless } from './headless'
  */
 export const labelcommand = async (id, data, orientation, mirror = false, upsideDown = false) => {
   var model = await headless({ id })
-  const port = process.env.PORT
-  const url = `${protocol}://${host}:${port}/${path}`
+  var fontListChanged = false
+  fontsToUse = (await fonts()).map((f: { name: string }) => {
+    if (!fontListChanged && !fontsInUse.find(inUse => inUse == f.name)) {
+      fontListChanged = true
+    }
+    return f.name
+  })
 
-  const page = await labelPage
+  var page = await labelPage
+
+  if (fontListChanged) {
+    fontsInUse = fontsToUse
+    console.log('[label-command] Refreshing page to load fonts.')
+    await page.reload()
+  }
+
   var guid = uuid()
 
   const grf = await page.evaluate(
