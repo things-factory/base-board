@@ -1,6 +1,6 @@
 {
   "name": "@things-factory/board-service",
-  "version": "0.2.83",
+  "version": "0.3.0",
   "main": "dist-server/index.js",
   "browser": "client/index.js",
   "things-factory": true,
@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@things-factory/auth-base": "*",
+    "@things-factory/font-base": "*",
     "@things-factory/shell": "*",
     "printer": "^0.2.2",
     "puppeteer": "^1.19.0",
