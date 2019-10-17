@@ -2,16 +2,19 @@
  * Copyright © HatioLab Inc. All rights reserved.
  */
 
-import { browser } from '../headless-chromium'
+import { initializeChromium } from '../headless-chromium'
 import { fonts } from './fonts'
 import uuid from 'uuid/v4'
 
 import { headless } from './headless'
 
 var fontsInUse = [],
-  fontsToUse = []
+  fontsToUse = [],
+  labelPage
 
-const labelPage = browser.then(async b => {
+export async function initializeLabelPage() {
+  var browser = await initializeChromium()
+
   const protocol = 'http'
   const host = 'localhost'
   const path = 'label-board-view'
@@ -19,15 +22,15 @@ const labelPage = browser.then(async b => {
   const port = process.env.PORT
   const url = `${protocol}://${host}:${port}/${path}`
 
-  const page = await b.newPage()
+  labelPage = await browser.newPage()
   fontsToUse = (await fonts()).map((f: { name: string }) => f.name)
 
-  await page.setRequestInterception(true)
-  page.on('console', msg => {
+  await labelPage.setRequestInterception(true)
+  labelPage.on('console', msg => {
     console.log(`[browser ${msg._type}] ${msg._text}`)
     for (let i = 0; i < msg.args().length; ++i) console.log(`${i}: ${msg.args()[i]}`)
   })
-  page.on('request', request => {
+  labelPage.on('request', request => {
     if (request.url() === url) {
       request.continue({
         method: 'POST',
@@ -40,9 +43,9 @@ const labelPage = browser.then(async b => {
       request.continue()
     }
   })
-  await page.goto(url, { timeout: 0 })
-  return page
-})
+  await labelPage.goto(url, { timeout: 0 })
+  return labelPage
+}
 
 /**
  * 라벨 출력
@@ -63,7 +66,7 @@ export const labelcommand = async (id, data, orientation, mirror = false, upside
     return f.name
   })
 
-  var page = await labelPage
+  var page = labelPage
 
   if (fontListChanged) {
     fontsInUse = fontsToUse

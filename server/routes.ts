@@ -6,7 +6,7 @@ import { pdf } from './controllers/pdf'
 import { thumbnail } from './controllers/thumbnail'
 import { headless } from './controllers/headless'
 import { screencast } from './controllers/screencast'
-import { labelcommand } from './controllers/label-command'
+import { initializeLabelPage, labelcommand } from './controllers/label-command'
 import { printDirect } from './controllers/print'
 
 process.on('bootstrap-module-history-fallback' as any, (app, fallbackOption) => {
@@ -22,6 +22,8 @@ process.on('bootstrap-module-history-fallback' as any, (app, fallbackOption) => 
 })
 
 process.on('bootstrap-module-route' as any, (app, routes) => {
+  initializeLabelPage()
+
   const bodyParserOption = {
     formLimit: '10mb',
     jsonLimit: '10mb',
@@ -126,7 +128,7 @@ process.on('bootstrap-module-route' as any, (app, routes) => {
   routes.get('/print-label/:id', async (context, next) => {
     let id = context.params.id
     let data = Object.keys(context.query).length ? context.query : null
-    
+
     let orientation = data && data.orientation
     let mirror = data && data.mirror
     let upsideDown = data && data.upsideDown

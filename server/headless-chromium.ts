@@ -1,14 +1,14 @@
 const puppeteer = require('puppeteer')
 
-function initializeChromium() {
-  return puppeteer.launch({
-    // devtools: true,
-    args: ['--hide-scrollbars', '--mute-audio', '--no-sandbox']
-  })
-}
+var _browser: any
 
-export const browser = initializeChromium()
-export const defaultPage = browser.then(async browser => {
-  var pages = await browser.pages()
-  return pages[0]
-})
+export async function initializeChromium() {
+  if (!_browser) {
+    _browser = await puppeteer.launch({
+      // devtools: true,
+      args: ['--hide-scrollbars', '--mute-audio', '--no-sandbox']
+    })
+  }
+
+  return _browser
+}
