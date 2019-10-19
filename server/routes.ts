@@ -17,7 +17,8 @@ process.on('bootstrap-module-history-fallback' as any, (app, fallbackOption) => 
     '/print',
     '/label-board-view',
     '/headless',
-    '/headless-board-view'
+    '/headless-board-view',
+    '/pdf'
   )
 })
 
