@@ -11,14 +11,17 @@ import { printDirect } from './controllers/print'
 
 process.on('bootstrap-module-history-fallback' as any, (app, fallbackOption) => {
   fallbackOption.whiteList.push(
-    '/screenshot',
-    '/thumbnail',
-    '/label-command',
-    '/print',
-    '/label-board-view',
-    '/headless',
-    '/headless-board-view',
-    '/pdf'
+    ...[
+      'screenshot',
+      'thumbnail',
+      'label-command',
+      'print',
+      'print-label',
+      'label-board-view',
+      'headless',
+      'headless-board-view',
+      'pdf'
+    ].map(path => `^\/${path}($|[/?#])`)
   )
 })
 
