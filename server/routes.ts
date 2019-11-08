@@ -11,7 +11,7 @@ import { printDirect } from './controllers/print'
 
 process.on('bootstrap-module-history-fallback' as any, (app, fallbackOption) => {
   fallbackOption.whiteList.push(
-    ...[
+    `^\/(${[
       'screenshot',
       'thumbnail',
       'label-command',
@@ -21,7 +21,7 @@ process.on('bootstrap-module-history-fallback' as any, (app, fallbackOption) => 
       'headless',
       'headless-board-view',
       'pdf'
-    ].map(path => `^\/${path}($|[/?#])`)
+    ].join('|')})($|[/?#])`
   )
 })
 
