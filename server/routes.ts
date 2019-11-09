@@ -10,19 +10,19 @@ import { initializeLabelPage, labelcommand } from './controllers/label-command'
 import { printDirect } from './controllers/print'
 
 process.on('bootstrap-module-history-fallback' as any, (app, fallbackOption) => {
-  fallbackOption.whiteList.push(
-    `^\/(${[
-      'screenshot',
-      'thumbnail',
-      'label-command',
-      'print',
-      'print-label',
-      'label-board-view',
-      'headless',
-      'headless-board-view',
-      'pdf'
-    ].join('|')})($|[/?#])`
-  )
+  var paths = [
+    'screenshot',
+    'thumbnail',
+    'label-command',
+    'print',
+    'print-label',
+    'label-board-view',
+    'headless',
+    'headless-board-view',
+    'pdf'
+  ]
+
+  fallbackOption.whiteList.push(`^\/(${paths.join('|')})($|[/?#])`)
 })
 
 process.on('bootstrap-module-route' as any, (app, routes) => {
