@@ -1,6 +1,6 @@
 {
   "name": "@things-factory/board-service",
-  "version": "0.9.1",
+  "version": "1.0.0-alpha.9",
   "main": "dist-server/index.js",
   "browser": "client/index.js",
   "things-factory": true,
@@ -23,15 +23,15 @@
     "migration:revert": "node ./node_modules/typeorm/cli.js migration:revert"
   },
   "dependencies": {
-    "@things-factory/auth-base": "^0.9.0",
-    "@things-factory/font-base": "^0.9.0",
-    "@things-factory/shell": "^0.9.0",
-    "printer": "^0.2.2",
+    "@things-factory/auth-base": "^1.0.0-alpha.1",
+    "@things-factory/font-base": "^1.0.0-alpha.1",
+    "@things-factory/node-printer": "^1.0.0-alpha.1",
+    "@things-factory/shell": "^1.0.0-alpha.1",
     "puppeteer": "^1.19.0",
     "puppeteer-recorder": "^1.0.7"
   },
   "devDependencies": {
-    "@things-factory/board-app": "^0.9.0",
-    "@things-factory/board-test": "^0.9.0"
+    "@things-factory/board-app": "^1.0.0-alpha.1",
+    "@things-factory/board-test": "^1.0.0-alpha.1"
   }
 }

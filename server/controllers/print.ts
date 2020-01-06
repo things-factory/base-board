@@ -1,4 +1,4 @@
-import print from 'printer'
+import print from '@things-factory/node-printer'
 
 /**
  * shoot raw data to printer
@@ -9,7 +9,7 @@ import print from 'printer'
 export async function printDirect(printer, command) {
   await print.printDirect({
     data: command,
-    printer: printer,
+    printer,
     docname: 'RAW print',
     success: function(jobId) {
       console.log(`Job ID: ${jobId}`)
