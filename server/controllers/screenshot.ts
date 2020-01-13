@@ -12,7 +12,8 @@ export const screenshot = async ({
   data = null,
   width: w = 0,
   height: h = 0,
-  options = { encoding: 'base64' } as any
+  options = { encoding: 'base64' } as any,
+  isThumbnail = false
 } = {}) => {
   var browser = await initializeChromium()
 
@@ -21,6 +22,13 @@ export const screenshot = async ({
 
   var { width, height } = model
 
+  if (isThumbnail) {
+    var widthRatio = 400 / width,
+      heightRatio = 300 / height
+    var ratio = widthRatio < heightRatio ? widthRatio : heightRatio
+    width = width * ratio
+    height = height * ratio
+  }
   width = Math.floor(w || Number(width))
   height = Math.floor(h || Number(height))
 

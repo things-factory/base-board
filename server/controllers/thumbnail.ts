@@ -10,8 +10,7 @@ export const thumbnail = async ({
     id,
     model,
     data,
-    width: 400,
-    height: 300,
-    options
+    options,
+    isThumbnail: true
   })
 }
