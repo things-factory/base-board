@@ -1,5 +1,17 @@
 const puppeteer = require('puppeteer')
 import { headless } from './headless'
+import { config } from '@things-factory/env'
+
+const CHROMIUM_PATH = config.get('CHROMIUM_PATH')
+
+var launchSetting = {
+  headless: false,
+  args: ['--hide-scrollbars', '--mute-audio', '--headless', '--no-sandbox']
+}
+
+if (CHROMIUM_PATH) {
+  launchSetting['executablePath'] = CHROMIUM_PATH
+}
 
 const protocol = 'http'
 const host = 'localhost'
@@ -32,10 +44,7 @@ export const pdf = async ({
   width = Math.floor(width * ratio)
   height = Math.floor(height * ratio)
 
-  const browser = await puppeteer.launch({
-    headless: false,
-    args: ['--hide-scrollbars', '--mute-audio', '--headless', '--no-sandbox']
-  })
+  const browser = await puppeteer.launch(launchSetting)
 
   const page = await browser.newPage()
 

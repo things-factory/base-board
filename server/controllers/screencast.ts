@@ -1,6 +1,18 @@
 const puppeteer = require('puppeteer')
 const { record } = require('puppeteer-recorder')
 import { headless } from './headless'
+import { config } from '@things-factory/env'
+
+const CHROMIUM_PATH = config.get('CHROMIUM_PATH')
+
+var launchSetting = {
+  headless: false,
+  args: ['--hide-scrollbars', '--mute-audio', '--headless', '--no-sandbox']
+}
+
+if (CHROMIUM_PATH) {
+  launchSetting['executablePath'] = CHROMIUM_PATH
+}
 
 const protocol = 'http'
 const host = 'localhost'
@@ -26,10 +38,7 @@ export const screencast = async ({ id = '', model = null, width: w = 0, height: 
   width *= ratio
   height *= ratio
 
-  const browser = await puppeteer.launch({
-    headless: false,
-    args: ['--hide-scrollbars', '--mute-audio', '--headless', '--no-sandbox']
-  })
+  const browser = await puppeteer.launch(launchSetting)
 
   const page = await browser.newPage()
   await page.setViewport({
@@ -70,10 +79,10 @@ export const screencast = async ({ id = '', model = null, width: w = 0, height: 
     logEachFrame: true,
     fps: 10,
     frames: 10 * 1, // 1 seconds at 60 fps
-    prepare: function(browser, page) {
+    prepare: function (browser, page) {
       /* executed before first capture */
     },
-    render: function(browser, page, frame) {
+    render: function (browser, page, frame) {
       /* executed before each capture */
     }
   })
